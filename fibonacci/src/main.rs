@@ -1,6 +1,6 @@
 fn main() {
     for i in 0..20 {
-        let fib = fibonacci(i);
+        let fib = recfib(i);
         println!("{fib}")
     }
 }
@@ -23,4 +23,12 @@ fn fibonacci(n: i64) -> i64 {
     }
 
     fib
+}
+
+fn recfib(n: i64) -> i64 {
+    if n < 2 {
+        return n;
+    }
+
+    recfib(n - 1) + recfib(n - 2)
 }
