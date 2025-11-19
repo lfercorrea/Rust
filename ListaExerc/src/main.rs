@@ -157,4 +157,68 @@ fn main() {
     // for i in 34u8..128 {
     //     println!("{:<8} 0x{:<4X}   {:<8}", i, i, i as char);
     // }
+
+    // 3
+    // let mut input = String::new();
+    // print!("Type a price: ");
+    // io::stdout().flush().unwrap();
+    // io::stdin()
+    //     .read_line(&mut input)
+    //     .expect("Failed reading from stdin to input");
+    // let mut price: f64 = input.trim().parse().unwrap();
+    // price = (price * 1.1 * (price < 100.0) as u8 as f64)
+    //     + (price * 1.2 * (price >= 100.0) as u8 as f64);
+
+    // println!("Price: US$ {price:.2}");
+
+    // 4
+    // let mut input = String::new();
+    // print!("Type a value: ");
+    // io::stdout().flush().unwrap();
+    // io::stdin().read_line(&mut input).unwrap();
+    // let value1: f64 = input.trim().parse().unwrap();
+
+    // input.clear();
+    // print!("Type a operator: ");
+    // io::stdout().flush().unwrap();
+    // io::stdin().read_line(&mut input).unwrap();
+    // let operator: char = input.trim().parse().unwrap();
+
+    // input.clear();
+    // print!("Type another value: ");
+    // io::stdout().flush().unwrap();
+    // io::stdin().read_line(&mut input).unwrap();
+    // let value2: f64 = input.trim().parse().unwrap();
+    let prompts = ["Type the value 1", "Type an operator", "Type the value 2"];
+    let mut values = [0.0_f64; 2];
+    let mut operator: char = ' ';
+    let mut input = String::new();
+
+    for (i, prompt) in prompts.iter().enumerate() {
+        print!("{prompt}: ");
+        io::stdout().flush().unwrap();
+        input.clear();
+        io::stdin().read_line(&mut input).unwrap();
+
+        match i {
+            0 => values[0] = input.trim().parse().unwrap(),
+            1 => operator = input.trim().parse().unwrap(),
+            2 => values[1] = input.trim().parse().unwrap(),
+            _ => unreachable!(),
+        }
+    }
+
+    let result = if operator == '+' {
+        values[0] + values[1]
+    } else if operator == '-' {
+        values[0] - values[1]
+    } else if operator == '/' && values[1] != 0.0 {
+        values[0] / values[1]
+    } else if operator == '*' {
+        values[0] * values[1]
+    } else {
+        0.0
+    };
+
+    println!("{} {} {} = {}", values[0], operator, values[1], result);
 }
