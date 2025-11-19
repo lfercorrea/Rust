@@ -1,4 +1,5 @@
 use std::{
+    arch::x86_64::_MM_FLUSH_ZERO_MASK,
     ffi::c_double,
     fs::read_link,
     io::{self, Read, Write, stdin, stdout},
@@ -223,30 +224,109 @@ fn main() {
     // };
 
     // println!("{} {} {} = {}", values[0], operator, values[1], result);
+    // 5
+    // let mut input = String::new();
+    // let mut grades: Vec<f64> = Vec::new();
+
+    // 'hall: loop {
+    //     let mut avg: f64 = 0.0;
+    //     for i in 1..=2 {
+    //         print!("Type the course grade {}: ", i);
+    //         io::stdout().flush().expect("FLUSHING TO STDOUT FAILURE");
+    //         input.clear();
+    //         io::stdin()
+    //             .read_line(&mut input)
+    //             .expect("READING STDIN FAILURE");
+    //         let grade: f64 = input.trim().parse().expect("PARSING INPUT FAILURE");
+    //         avg += grade;
+
+    //         if grade == 50_f64 {
+    //             break 'hall;
+    //         }
+
+    //         grades.push(grade);
+    //     }
+
+    //     avg /= 2_f64;
+
+    //     println!("Avg: {avg:.3}");
+    // }
+
+    // group iii
+    // 1 - skipped
+    // 2
+    // let mut numbers: Vec<i64> = Vec::new();
+    // let mut input = String::new();
+
+    // for i in 1..3 {
+    //     print!("Type the number {i}: ");
+    //     io::stdout().flush().unwrap();
+    //     input.clear();
+    //     io::stdin()
+    //         .read_line(&mut input)
+    //         .expect("READING STDIN FAILURE");
+    //     numbers.push(input.trim().parse::<i64>().expect("PARSING INPUT FAILURE"));
+    // }
+
+    // let sum = sum(numbers[0], numbers[1]);
+    // let sub = sub(numbers[0], numbers[1]);
+
+    // println!("{} + {} = {}", numbers[0], numbers[1], sum);
+    // println!("{} - {} = {}", numbers[0], numbers[1], sub);
+
+    // fn sum(n1: i64, n2: i64) -> i64 {
+    //     n1 + n2
+    // }
+
+    // fn sub(n1: i64, n2: i64) -> i64 {
+    //     n1 - n2
+    // }
+
+    // group iv
+    // 1
+    // let base: f64 = 2_f64;
+    // let expoent: i64 = 20;
+    // let result = mypow(base, expoent);
+
+    // println!("Pow {base}^{expoent} = {result}");
+
+    // fn mypow(base: f64, expoent: i64) -> f64 {
+    //     let mut sum: f64 = 1_f64;
+    //     for _ in 0..expoent {
+    //         sum *= base;
+    //     }
+
+    //     sum
+    // }
+
+    // 2
+    // println!("{}! = {}", 5, fatorial(5));
+
+    // fn fatorial(n: i64) -> i64 {
+    //     let mut n = n;
+    //     let mut a: i64 = 1;
+    //     while n > 1 {
+    //         a *= n;
+    //         n -= 1;
+    //     }
+
+    //     a
+    // }
+
+    // 3
     let mut input = String::new();
-    let mut grades: Vec<f64> = Vec::new();
-
-    'hall: loop {
-        let mut avg: f64 = 0.0;
-        for i in 1..=2 {
-            print!("Type the course grade {}: ", i);
-            io::stdout().flush().expect("FLUSHING TO STDOUT FAILURE");
-            input.clear();
-            io::stdin()
-                .read_line(&mut input)
-                .expect("READING STDIN FAILURE");
-            let grade: f64 = input.trim().parse().expect("PARSING INPUT FAILURE");
-            avg += grade;
-
-            if grade == 50_f64 {
-                break 'hall;
-            }
-
-            grades.push(grade);
-        }
-
-        avg /= 2_f64;
-
-        println!("Avg: {avg:.3}");
+    print!("Type a value for x in e^x: ");
+    io::stdout().flush().unwrap();
+    io::stdin().read_line(&mut input).unwrap();
+    let x: f64 = input.trim().parse().unwrap();
+    let mut e: f64 = 1.0;
+    let mut term: f64 = 1.0;
+    let mut i: f64 = 1.0;
+    while term > 10e-6 {
+        term *= x / i;
+        e += term;
+        i += 1.0;
     }
+
+    println!("e^{x} = {e}");
 }
