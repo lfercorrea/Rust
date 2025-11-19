@@ -1,6 +1,7 @@
 use std::{
     ffi::c_double,
-    io::{self, Read, Write, stdout},
+    fs::read_link,
+    io::{self, Read, Write, stdin, stdout},
     result,
 };
 
@@ -189,36 +190,63 @@ fn main() {
     // io::stdout().flush().unwrap();
     // io::stdin().read_line(&mut input).unwrap();
     // let value2: f64 = input.trim().parse().unwrap();
-    let prompts = ["Type the value 1", "Type an operator", "Type the value 2"];
-    let mut values = [0.0_f64; 2];
-    let mut operator: char = ' ';
+    // variation ... ->
+    // let prompts = ["Type the value 1", "Type an operator", "Type the value 2"];
+    // let mut values = [0.0_f64; 2];
+    // let mut operator: char = ' ';
+    // let mut input = String::new();
+
+    // for (i, prompt) in prompts.iter().enumerate() {
+    //     print!("{prompt}: ");
+    //     io::stdout().flush().unwrap();
+    //     input.clear();
+    //     io::stdin().read_line(&mut input).unwrap();
+
+    //     match i {
+    //         0 => values[0] = input.trim().parse().unwrap(),
+    //         1 => operator = input.trim().parse().unwrap(),
+    //         2 => values[1] = input.trim().parse().unwrap(),
+    //         _ => unreachable!(),
+    //     }
+    // }
+
+    // let result = if operator == '+' {
+    //     values[0] + values[1]
+    // } else if operator == '-' {
+    //     values[0] - values[1]
+    // } else if operator == '/' && values[1] != 0.0 {
+    //     values[0] / values[1]
+    // } else if operator == '*' {
+    //     values[0] * values[1]
+    // } else {
+    //     0.0
+    // };
+
+    // println!("{} {} {} = {}", values[0], operator, values[1], result);
     let mut input = String::new();
+    let mut grades: Vec<f64> = Vec::new();
 
-    for (i, prompt) in prompts.iter().enumerate() {
-        print!("{prompt}: ");
-        io::stdout().flush().unwrap();
-        input.clear();
-        io::stdin().read_line(&mut input).unwrap();
+    'hall: loop {
+        let mut avg: f64 = 0.0;
+        for i in 1..=2 {
+            print!("Type the course grade {}: ", i);
+            io::stdout().flush().expect("FLUSHING TO STDOUT FAILURE");
+            input.clear();
+            io::stdin()
+                .read_line(&mut input)
+                .expect("READING STDIN FAILURE");
+            let grade: f64 = input.trim().parse().expect("PARSING INPUT FAILURE");
+            avg += grade;
 
-        match i {
-            0 => values[0] = input.trim().parse().unwrap(),
-            1 => operator = input.trim().parse().unwrap(),
-            2 => values[1] = input.trim().parse().unwrap(),
-            _ => unreachable!(),
+            if grade == 50_f64 {
+                break 'hall;
+            }
+
+            grades.push(grade);
         }
+
+        avg /= 2_f64;
+
+        println!("Avg: {avg:.3}");
     }
-
-    let result = if operator == '+' {
-        values[0] + values[1]
-    } else if operator == '-' {
-        values[0] - values[1]
-    } else if operator == '/' && values[1] != 0.0 {
-        values[0] / values[1]
-    } else if operator == '*' {
-        values[0] * values[1]
-    } else {
-        0.0
-    };
-
-    println!("{} {} {} = {}", values[0], operator, values[1], result);
 }
