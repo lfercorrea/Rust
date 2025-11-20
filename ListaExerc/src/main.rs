@@ -456,28 +456,53 @@ fn main() {
     //     values
     // }
 
-    //3
-    let times = 4;
-    let mut values: Vec<f64> = Vec::new();
-    let mut input = String::new();
-    for i in 0..times {
-        print!("Type the value {}: ", i + 1);
-        io::stdout().flush().unwrap();
-        input.clear();
-        io::stdin().read_line(&mut input).unwrap();
-        let value: f64 = input.trim().parse().unwrap();
-        values.push(value);
-    }
+    // 3
+    // let times = 4;
+    // let mut values: Vec<f64> = Vec::new();
+    // let mut input = String::new();
+    // for i in 0..times {
+    //     print!("Type the value {}: ", i + 1);
+    //     io::stdout().flush().unwrap();
+    //     input.clear();
+    //     io::stdin().read_line(&mut input).unwrap();
+    //     let value: f64 = input.trim().parse().unwrap();
+    //     values.push(value);
+    // }
 
-    println!("Medium: {}", medium(values));
+    // println!("Medium: {}", medium(values));
 
-    fn medium(values: Vec<f64>) -> f64 {
-        let len = values.len();
-        let mut sum: f64 = 0.0;
-        for value in values {
-            sum += value;
-        }
+    // fn medium(values: Vec<f64>) -> f64 {
+    //     let len = values.len();
+    //     let mut sum: f64 = 0.0;
+    //     for value in values {
+    //         sum += value;
+    //     }
 
-        if len != 0 { sum / len as f64 } else { sum }
-    }
+    //     if len != 0 { sum / len as f64 } else { sum }
+    // }
+
+    // 4
+    // let mut input: String = String::new();
+    // let mut values: Vec<f64> = Vec::new();
+
+    // print!("Type how many values do you want to place in the array: ");
+    // io::stdout().flush().unwrap();
+    // input.clear();
+    // io::stdin().read_line(&mut input).unwrap();
+    // let options: i32 = input.trim().parse().unwrap();
+
+    // for i in 1..=options {
+    //     print!("Type the option {i}: ");
+    //     io::stdout().flush().unwrap();
+    //     input.clear();
+    //     io::stdin().read_line(&mut input).unwrap();
+    //     let value: f64 = input.trim().parse().unwrap();
+    //     values.push(value);
+    // }
+
+    // println!("{:?}", values);
+
+    // 5 skipped
+
+    // 6
 }
