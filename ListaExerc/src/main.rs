@@ -427,7 +427,36 @@ fn main() {
     // }
 
     // 2
+    // let times = 4;
+    // let mut values: Vec<f64> = Vec::new();
+    // let mut input = String::new();
+    // for i in 0..times {
+    //     print!("Type the value {}: ", i + 1);
+    //     io::stdout().flush().unwrap();
+    //     input.clear();
+    //     io::stdin().read_line(&mut input).unwrap();
+    //     let value: f64 = input.trim().parse().unwrap();
+    //     values.push(value);
+    // }
 
+    // let values = bubblesort(&mut values);
+
+    // println!("{:?}", values);
+
+    // fn bubblesort(values: &mut Vec<f64>) -> &mut Vec<f64> {
+    //     let n = values.len();
+    //     for i in 0..n {
+    //         for j in 0..n - 1 - i {
+    //             if values[j] > values[j + 1] {
+    //                 values.swap(j, j + 1);
+    //             }
+    //         }
+    //     }
+
+    //     values
+    // }
+
+    //3
     let times = 4;
     let mut values: Vec<f64> = Vec::new();
     let mut input = String::new();
@@ -440,20 +469,15 @@ fn main() {
         values.push(value);
     }
 
-    let values = bubblesort(&mut values);
+    println!("Medium: {}", medium(values));
 
-    println!("{:?}", values);
-
-    fn bubblesort(values: &mut Vec<f64>) -> &mut Vec<f64> {
-        let n = values.len();
-        for i in 0..n {
-            for j in 0..n - 1 - i {
-                if values[j] > values[j + 1] {
-                    values.swap(j, j + 1);
-                }
-            }
+    fn medium(values: Vec<f64>) -> f64 {
+        let len = values.len();
+        let mut sum: f64 = 0.0;
+        for value in values {
+            sum += value;
         }
 
-        values
+        if len != 0 { sum / len as f64 } else { sum }
     }
 }
