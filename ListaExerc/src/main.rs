@@ -502,7 +502,62 @@ fn main() {
 
     // println!("{:?}", values);
 
-    // 5 skipped
+    // 5
+    // let mut input = String::new();
+    // let mut values: Vec<i32> = Vec::new();
+    // let mut sum = 0;
+    // for i in 0..10 {
+    //     print!("Type the value {}: ", i + 1);
+    //     io::stdout().flush().unwrap();
+    //     input.clear();
+    //     io::stdin().read_line(&mut input).unwrap();
+    //     let value: i32 = input.trim().parse().unwrap();
+    //     values.push(value);
+    //     sum += value;
+    // }
+
+    // let medium: f64 = sum as f64 / 10_f64;
+
+    // println!("Medium: {medium}\nSum: {sum}");
+    // let mut member = 0;
+    // for value in values {
+    //     if medium == value as f64 {
+    //         member = value;
+    //         break;
+    //     }
+    // }
+
+    // println!("Yep, {member} is equals to the medium of all members");
 
     // 6
+    // let rows = 5;
+    // let cols = 3;
+    // let mut even_medium = 0_f64;
+    // let mut odds_medium = 0_f64;
+    // let mut input = String::new();
+    // let mut matrix: Vec<Vec<f64>> = vec![vec![0_f64; cols]; rows];
+    // for (i, _) in (0..rows).enumerate() {
+    //     for (j, _) in (0..cols).enumerate() {
+    //         print!("Type the value [{i}][{j}]: ");
+    //         io::stdout().flush().unwrap();
+    //         input.clear();
+    //         io::stdin().read_line(&mut input).unwrap();
+    //         let value: f64 = input.trim().parse().unwrap();
+    //         matrix[i][j] = value;
+    //         if j % 2 == 0 {
+    //             odds_medium += matrix[i][j];
+    //         } else {
+    //             even_medium += matrix[i][j];
+    //         }
+    //     }
+    // }
+
+    // even_medium /= cols as f64;
+    // odds_medium /= cols as f64;
+
+    // // println!("{:?}", matrix);
+    // println!(
+    //     "Odd columns medium: {odds_medium}\n\
+    //     Even columns medium: {even_medium}"
+    // );
 }
