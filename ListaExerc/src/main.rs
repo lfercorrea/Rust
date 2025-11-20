@@ -331,62 +331,98 @@ fn main() {
     // println!("e^{x} = {e}");
 
     // 4
-    let mut input = String::new();
+    // let mut input = String::new();
 
-    print!("Type the expent amount: ");
-    io::stdout().flush().unwrap();
-    io::stdin().read_line(&mut input).unwrap();
-    let value: f64 = input.trim().parse().unwrap();
+    // print!("Type the expent amount: ");
+    // io::stdout().flush().unwrap();
+    // io::stdin().read_line(&mut input).unwrap();
+    // let value: f64 = input.trim().parse().unwrap();
 
-    let option = print_options(value);
+    // let option = print_options(value);
 
-    match option {
-        1 => println!("You've choose option 1"),
-        2 => println!("You've choose option 2"),
-        3 => println!("You've choose option 3"),
-        _ => println!("Invalid option"),
-    }
+    // match option {
+    //     1 => println!("You've choose option 1"),
+    //     2 => println!("You've choose option 2"),
+    //     3 => println!("You've choose option 3"),
+    //     _ => println!("Invalid option"),
+    // }
 
-    fn print_options(value: f64) -> u32 {
-        let full = infull(value);
-        let half = inhalf(value);
-        let interest = 0.03;
+    // fn print_options(value: f64) -> u32 {
+    //     let full = infull(value);
+    //     let half = inhalf(value);
+    //     let interest = 0.03;
 
-        print!(
-            "Available payment options:\n\
-            Option 1: full payment with discount of 10% (US$ {full:.2})\n\
-            Option 2: half-payment in two installments of US$ {half:.2}\n"
-        );
+    //     print!(
+    //         "Available payment options:\n\
+    //         Option 1: full payment with discount of 10% (US$ {full:.2})\n\
+    //         Option 2: half-payment in two installments of US$ {half:.2}\n"
+    //     );
 
-        if value > 100_f64 {
-            println!("Option 3: from 3 until 10 installments of:");
-            for i in 3..=10 {
-                let installments = in3to10(value, interest, i);
-                println!("\t{i}x of US$ {:.2}", installments);
-            }
-        }
+    //     if value > 100_f64 {
+    //         println!("Option 3: from 3 until 10 installments of:");
+    //         for i in 3..=10 {
+    //             let installments = in3to10(value, interest, i);
+    //             println!("\t{i}x of US$ {:.2}", installments);
+    //         }
+    //     }
 
-        let mut input = String::new();
-        input.clear();
-        print!("Type an option number: ");
-        io::stdout().flush().unwrap();
-        io::stdin().read_line(&mut input).unwrap();
-        let option: u32 = input.trim().parse().unwrap();
+    //     let mut input = String::new();
+    //     input.clear();
+    //     print!("Type an option number: ");
+    //     io::stdout().flush().unwrap();
+    //     io::stdin().read_line(&mut input).unwrap();
+    //     let option: u32 = input.trim().parse().unwrap();
 
-        option
-    }
+    //     option
+    // }
 
-    fn inhalf(value: f64) -> f64 {
-        value / 2.0
-    }
+    // fn inhalf(value: f64) -> f64 {
+    //     value / 2.0
+    // }
 
-    fn infull(value: f64) -> f64 {
-        value * (1.0 - 0.1)
-    }
+    // fn infull(value: f64) -> f64 {
+    //     value * (1.0 - 0.1)
+    // }
 
-    fn in3to10(pv: f64, i: f64, time: i32) -> f64 {
-        let x = (1.0 + i).powi(time);
+    // fn in3to10(pv: f64, i: f64, time: i32) -> f64 {
+    //     let x = (1.0 + i).powi(time);
 
-        pv * i * x / (x - 1_f64)
-    }
+    //     pv * i * x / (x - 1_f64)
+    // }
+    // group vi
+    // 1
+    // struct Number {
+    //     minor: f64,
+    //     major: f64,
+    // }
+
+    // let times = 4;
+    // let mut values: Vec<f64> = Vec::new();
+    // let mut input = String::new();
+    // for i in 0..times {
+    //     print!("Type the value {i}: ");
+    //     io::stdout().flush().unwrap();
+    //     input.clear();
+    //     io::stdin().read_line(&mut input).unwrap();
+    //     let value: f64 = input.trim().parse().unwrap();
+    //     values.push(value);
+    // }
+
+    // let nums: Number = major(values);
+
+    // println!("minor: {}, major: {}", nums.minor, nums.major);
+
+    // fn major(values: Vec<f64>) -> Number {
+    //     let mut min: f64 = values[0];
+    //     let mut max: f64 = values[0];
+    //     for value in values {
+    //         min = if min < value { min } else { value };
+    //         max = if max > value { max } else { value };
+    //     }
+
+    //     Number {
+    //         minor: min,
+    //         major: max,
+    //     }
+    // }
 }
