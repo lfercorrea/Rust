@@ -3,7 +3,7 @@ use std::{
     ffi::c_double,
     fs::read_link,
     io::{self, Read, Write, stdin, stdout},
-    result,
+    result, string,
 };
 
 fn main() {
@@ -314,19 +314,79 @@ fn main() {
     // }
 
     // 3
+    // let mut input = String::new();
+    // print!("Type a value for x in e^x: ");
+    // io::stdout().flush().unwrap();
+    // io::stdin().read_line(&mut input).unwrap();
+    // let x: f64 = input.trim().parse().unwrap();
+    // let mut e: f64 = 1.0;
+    // let mut term: f64 = 1.0;
+    // let mut i: f64 = 1.0;
+    // while term > 10e-6 {
+    //     term *= x / i;
+    //     e += term;
+    //     i += 1.0;
+    // }
+
+    // println!("e^{x} = {e}");
+
+    // 4
     let mut input = String::new();
-    print!("Type a value for x in e^x: ");
+
+    print!("Type the expent amount: ");
     io::stdout().flush().unwrap();
     io::stdin().read_line(&mut input).unwrap();
-    let x: f64 = input.trim().parse().unwrap();
-    let mut e: f64 = 1.0;
-    let mut term: f64 = 1.0;
-    let mut i: f64 = 1.0;
-    while term > 10e-6 {
-        term *= x / i;
-        e += term;
-        i += 1.0;
+    let value: f64 = input.trim().parse().unwrap();
+
+    let option = print_options(value);
+
+    match option {
+        1 => println!("You've choose option 1"),
+        2 => println!("You've choose option 2"),
+        3 => println!("You've choose option 3"),
+        _ => println!("Invalid option"),
     }
 
-    println!("e^{x} = {e}");
+    fn print_options(value: f64) -> u32 {
+        let full = infull(value);
+        let half = inhalf(value);
+        let interest = 0.03;
+
+        print!(
+            "Available payment options:\n\
+            Option 1: full payment with discount of 10% (US$ {full:.2})\n\
+            Option 2: half-payment in two installments of US$ {half:.2}\n"
+        );
+
+        if value > 100_f64 {
+            println!("Option 3: from 3 until 10 installments of:");
+            for i in 3..=10 {
+                let installments = in3to10(value, interest, i);
+                println!("\t{i}x of US$ {:.2}", installments);
+            }
+        }
+
+        let mut input = String::new();
+        input.clear();
+        print!("Type an option number: ");
+        io::stdout().flush().unwrap();
+        io::stdin().read_line(&mut input).unwrap();
+        let option: u32 = input.trim().parse().unwrap();
+
+        option
+    }
+
+    fn inhalf(value: f64) -> f64 {
+        value / 2.0
+    }
+
+    fn infull(value: f64) -> f64 {
+        value * (1.0 - 0.1)
+    }
+
+    fn in3to10(pv: f64, i: f64, time: i32) -> f64 {
+        let x = (1.0 + i).powi(time);
+
+        pv * i * x / (x - 1_f64)
+    }
 }
