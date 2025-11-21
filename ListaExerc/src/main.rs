@@ -6,6 +6,12 @@ use std::{
     result, string,
 };
 
+enum Value {
+    IntegerT(i32),
+    DoubleT(f64),
+    StringT(String),
+}
+
 fn get_string(input_msg: &str) -> String {
     let mut input = String::new();
     print!("{input_msg}");
@@ -627,29 +633,58 @@ fn main() {
     // }
 
     // 3
-    let input = get_string("Type a string: ");
-    let input = input.trim_end();
-    let chars: Vec<char> = input.chars().collect();
+    // let input = get_string("Type a string: ");
+    // let input = input.trim_end();
+    // let chars: Vec<char> = input.chars().collect();
 
-    print_normal(&chars, 0);
-    println!();
-    print_reverse(&chars, chars.len());
-    println!();
-    fn print_normal(chars: &[char], idx: usize) {
-        if idx >= chars.len() {
-            return;
-        }
-        print!("{}", chars[idx]);
+    // print_normal(&chars, 0);
+    // println!();
+    // print_reverse(&chars, chars.len());
+    // println!();
+    // fn print_normal(chars: &[char], idx: usize) {
+    //     if idx >= chars.len() {
+    //         return;
+    //     }
+    //     print!("{}", chars[idx]);
 
-        print_normal(chars, idx + 1)
-    }
+    //     print_normal(chars, idx + 1)
+    // }
 
-    fn print_reverse(chars: &[char], idx: usize) {
-        if idx == 0 {
-            return;
-        }
-        print!("{}", chars[idx - 1]);
+    // fn print_reverse(chars: &[char], idx: usize) {
+    //     if idx == 0 {
+    //         return;
+    //     }
+    //     print!("{}", chars[idx - 1]);
 
-        print_reverse(chars, idx - 1);
-    }
+    //     print_reverse(chars, idx - 1);
+    // }
+
+    // 4
+    // let name = get_string("Type your name: ");
+    // let address = get_string("Type your address: ");
+    // let phone = get_string("Type your phone number: ");
+    // let age = get_int("Type your age (years): ");
+
+    // println!(
+    //     "Your name is {name}.\n\
+    //     Your address is {address}.\n\
+    //     Your phone number is {phone} and you're {age} years old."
+    // );
+
+    // 5
+    // match strbool() {
+    //     Some(value) => println!("Value: {value}"),
+    //     None => println!("No return"),
+    // }
+
+    // fn strbool() -> Option<i32> {
+    //     let input = get_string("Type a string: ");
+    //     match input.as_str() {
+    //         "SIM" => Some(1),
+    //         "NÃO" => Some(0),
+    //         _ => None,
+    //     }
+    // }
+
+    // 6
 }
