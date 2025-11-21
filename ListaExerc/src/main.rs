@@ -619,9 +619,37 @@ fn main() {
     //     Lower chars: {lower}\n"
     // );
 
-    let text = get_string("Escolha uma string: ");
+    // 2
+    // let text = get_string("Escolha uma string: ");
 
-    for word in text.split(' ') {
-        println!("{word}");
+    // for word in text.split(' ') {
+    //     println!("{word}");
+    // }
+
+    // 3
+    let input = get_string("Type a string: ");
+    let input = input.trim_end();
+    let chars: Vec<char> = input.chars().collect();
+
+    print_normal(&chars, 0);
+    println!();
+    print_reverse(&chars, chars.len());
+    println!();
+    fn print_normal(chars: &[char], idx: usize) {
+        if idx >= chars.len() {
+            return;
+        }
+        print!("{}", chars[idx]);
+
+        print_normal(chars, idx + 1)
+    }
+
+    fn print_reverse(chars: &[char], idx: usize) {
+        if idx == 0 {
+            return;
+        }
+        print!("{}", chars[idx - 1]);
+
+        print_reverse(chars, idx - 1);
     }
 }
