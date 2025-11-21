@@ -2,7 +2,7 @@ use std::{
     arch::x86_64::_MM_FLUSH_ZERO_MASK,
     ffi::c_double,
     fs::read_link,
-    io::{self, Read, Write, stdin, stdout},
+    io::{self, Read, Write, empty, stdin, stdout},
     result, string,
 };
 
@@ -687,4 +687,42 @@ fn main() {
     // }
 
     // 6
+    // let input = get_string("Type a string: ");
+    // print_words(input);
+
+    // fn print_words(input: String) {
+    //     println!(
+    //         "'{}' has {} words.",
+    //         input,
+    //         input.split_whitespace().count()
+    //     );
+    // }
+
+    // 7
+    // let mut emptystr = String::new();
+    // let text = get_string("Type a text: ");
+    // strcpy(&mut emptystr, text);
+
+    // println!("Copied text: '{emptystr}'");
+
+    // fn strcpy(dest: &mut String, src: String) {
+    //     let chars: Vec<char> = src.chars().collect();
+
+    //     for c in chars {
+    //         dest.push(c);
+    //     }
+    // }
+
+    // 8
+    // let input = get_string("Type any number: ");
+    // let numbers_ext: [&str; 10] = [
+    //     "zero", "um", "dois", "três", "quatro", "cinco", "seis", "sete", "oito", "nove",
+    // ];
+
+    // for ch in input.chars() {
+    //     let c: u8 = ch as u8 - b'0';
+    //     print!("{}, ", numbers_ext[c as usize]);
+    // }
+
+    // 9
 }
