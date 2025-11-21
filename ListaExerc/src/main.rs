@@ -6,6 +6,33 @@ use std::{
     result, string,
 };
 
+fn get_string(input_msg: &str) -> String {
+    let mut input = String::new();
+    print!("{input_msg}");
+    io::stdout().flush().unwrap();
+    io::stdin().read_line(&mut input).unwrap();
+
+    input.trim_end().to_string()
+}
+
+fn get_int(input_msg: &str) -> i32 {
+    let mut input = String::new();
+    print!("{input_msg}");
+    io::stdout().flush().unwrap();
+    io::stdin().read_line(&mut input).unwrap();
+
+    input.trim().parse().unwrap()
+}
+
+fn get_double(input_msg: &str) -> f64 {
+    let mut input = String::new();
+    print!("{input_msg}");
+    io::stdout().flush().unwrap();
+    io::stdin().read_line(&mut input).unwrap();
+
+    input.trim().parse().unwrap()
+}
+
 fn main() {
     // // Group I
     // // 1
@@ -560,4 +587,41 @@ fn main() {
     //     "Odd columns medium: {odds_medium}\n\
     //     Even columns medium: {even_medium}"
     // );
+
+    // group vii - strings
+    // 1
+    // let mut input = String::new();
+    // print!("Type a string: ");
+    // io::stdout().flush().unwrap();
+    // io::stdin().read_line(&mut input).unwrap();
+    // let text: String = input.trim_end().chars().take(80).collect();
+    // let len = text.chars().count();
+    // let mut punctuation = 0;
+    // let mut lower = 0;
+    // let mut numeric = 0;
+
+    // for c in text.chars() {
+    //     if c.is_ascii_punctuation() {
+    //         punctuation += 1;
+    //     }
+    //     if c.is_ascii_digit() {
+    //         numeric += 1;
+    //     }
+    //     if c.is_ascii_lowercase() {
+    //         lower += 1;
+    //     }
+    // }
+
+    // println!(
+    //     "Str len: {len}\n\
+    //     Punctuation chars: {punctuation}\n\
+    //     Numeric chars: {numeric}\n\
+    //     Lower chars: {lower}\n"
+    // );
+
+    let text = get_string("Escolha uma string: ");
+
+    for word in text.split(' ') {
+        println!("{word}");
+    }
 }
