@@ -794,26 +794,122 @@ fn main() {
     1. Fazer uma função que retorna a soma, a diferença e o produto entre dois
     números.
     */
-    struct Numbers {
-        sum: i32,
-        diff: i32,
-        prod: i32,
-    }
+    // struct Numbers {
+    //     sum: i32,
+    //     diff: i32,
+    //     prod: i32,
+    // }
 
-    let result = mymath(3, 4);
+    // let result = mymath(3, 4);
 
-    println!(
-        "Sum: {}\n\
-        Diff: {}\n\
-        Prod: {}",
-        result.sum, result.diff, result.prod
-    );
+    // println!(
+    //     "Sum: {}\n\
+    //     Diff: {}\n\
+    //     Prod: {}",
+    //     result.sum, result.diff, result.prod
+    // );
 
-    fn mymath(n1: i32, n2: i32) -> Numbers {
-        Numbers {
-            sum: n1 + n2,
-            diff: n1 - n2,
-            prod: n1 * n2,
-        }
-    }
+    // fn mymath(n1: i32, n2: i32) -> Numbers {
+    //     Numbers {
+    //         sum: n1 + n2,
+    //         diff: n1 - n2,
+    //         prod: n1 * n2,
+    //     }
+    // }
+
+    /*
+        2. Fazer uma função em "rust" que retorna a razão entre dois números. A função
+    deve retornar pelo comando return o valor 1 se a operação foi possível e o
+    valor 0 se a operação não foi possível (divisão por zero, por exemplo). O
+    resultado da divisão deve retonar por um parâmetro por referência.
+         */
+
+    // let mut div = 0_f64;
+    // let dest = ratio(&mut div, 8.0, 2.0);
+
+    // println!(
+    //     "Div = {}\n\
+    //     Return = {}",
+    //     div, dest
+    // );
+
+    // fn ratio(dest: &mut f64, n1: f64, n2: f64) -> f64 {
+    //     if n2 == 0.0 {
+    //         return 0.0;
+    //     }
+    //     *dest = n1 / n2;
+
+    //     1.0
+    // }
+
+    /*
+        3. Fazer uma rotina em "rust" que recebe um vetor de números inteiros como
+    parâmetro onde todos os valores exceto o último são positivos e devolve:
+        - a média dos valores do vetor;
+        - o menor valor do vetor (sem considerar o último)
+        - o maior valor do vetor
+     */
+    // let numbers: [i32; 10] = [0, 1, 2, 3, 4, 5, 6, 7, 8, -9];
+
+    // struct Numbers {
+    //     sum: i32,
+    //     len: usize,
+    //     med: f64,
+    //     min: i32,
+    //     max: i32,
+    // }
+
+    // let n = mathoper(numbers);
+
+    // println!(
+    //     "Sum: {}\n\
+    //     Len: {}\n\
+    //     Med: {:.2}\n\
+    //     Min: {}\n\
+    //     Max: {}",
+    //     n.sum, n.len, n.med, n.min, n.max
+    // );
+
+    // fn mathoper(numbers: [i32; 10]) -> Numbers {
+    //     let len = numbers.len();
+    //     let mut min = numbers[0];
+    //     let mut max = numbers[0];
+    //     let mut sum = 0;
+
+    //     for n in numbers {
+    //         if n > 0 {
+    //             if min > n {
+    //                 min = n;
+    //             }
+
+    //             if max < n {
+    //                 max = n;
+    //             }
+
+    //             sum += n;
+    //         }
+    //     }
+
+    //     let med = sum as f64 / len as f64;
+
+    //     Numbers {
+    //         sum,
+    //         len,
+    //         med,
+    //         min,
+    //         max,
+    //     }
+    // }
+
+    // /*
+    //    4. Fazer uma função para ler e retornar o valor das 3 notas de um aluno.
+    // */
+    // let mut grades: Vec<f64> = Vec::new();
+
+    // for i in 0..3 {
+    //     let grade = get_double("Type an grade: ");
+    //     grades.push(grade);
+    // }
+
+    // println!("Grades: {:?}", grades);
 }
