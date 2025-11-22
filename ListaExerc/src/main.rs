@@ -912,4 +912,78 @@ fn main() {
     // }
 
     // println!("Grades: {:?}", grades);
+
+    /*
+        5. Construir um programa em "C" que implementa uma agenda eletrônica. O
+    programa deve ter um menu com as seguintes opções:
+        Entrar um novo nome na agenda.
+        Imprimir na tela os dados de uma das pessoas cadastradas (conforme
+        solicitação).
+        Imprimir a lista de nomes cadastrados que comecem pela letra indicada.
+        Fim
+    Cada entrada da agenda deve ter os seguintes campos:
+        char nome[30];
+        char endereco[100];
+        char fone[10];
+        long int CEP;
+        Obs: a agenda deve ter capacidade para 100 entradas.
+         */
+    struct Contato {
+        nome: String,
+        endereco: String,
+        fone: String,
+        cep: i32,
+    }
+
+    let mut agenda: Vec<Contato> = Vec::new();
+
+    loop {
+        println!(
+            "Menu principal do programa:\n\n\
+            1. Entrar um novo nome na agenda\n\
+            2. Imprimir na tela os dados de uma das pessoas cadastradas\n\
+            3. Imprimir a lista de nomes cadastrados que comecem pela letra indicada\n\
+            4. Fim"
+        );
+
+        let option: i32 = get_int("Escolha uma opção: ");
+        match option {
+            1 => {
+                let contato: Contato = get_person();
+                agenda.push(contato);
+            }
+            2 => {
+                for contato in &agenda {
+                    println!("nome: {}", contato.nome);
+                }
+            }
+            3 => {
+                let letra = get_string("Digite uma letra para listar: ");
+                for contato in &agenda {
+                    if contato.nome.starts_with(&letra) {
+                        println!("nome: {}", contato.nome);
+                    }
+                }
+            }
+            4 => {
+                println!("Saindo...");
+                return;
+            }
+            _ => panic!("Opção inválida"),
+        }
+    }
+
+    fn get_person() -> Contato {
+        let nome = get_string("Insira o nome do contato: ");
+        let endereco = get_string("Insira o endereço do contato: ");
+        let cep = get_int("Insira o cep do contato: ");
+        let fone = get_string("Insira o telefone do contato: ");
+
+        Contato {
+            nome,
+            endereco,
+            fone,
+            cep,
+        }
+    }
 }
