@@ -794,4 +794,26 @@ fn main() {
     1. Fazer uma função que retorna a soma, a diferença e o produto entre dois
     números.
     */
+    struct Numbers {
+        sum: i32,
+        diff: i32,
+        prod: i32,
+    }
+
+    let result = mymath(3, 4);
+
+    println!(
+        "Sum: {}\n\
+        Diff: {}\n\
+        Prod: {}",
+        result.sum, result.diff, result.prod
+    );
+
+    fn mymath(n1: i32, n2: i32) -> Numbers {
+        Numbers {
+            sum: n1 + n2,
+            diff: n1 - n2,
+            prod: n1 * n2,
+        }
+    }
 }
