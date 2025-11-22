@@ -1,3 +1,4 @@
+use core::num;
 use std::{
     arch::x86_64::_MM_FLUSH_ZERO_MASK,
     ffi::c_double,
@@ -725,4 +726,72 @@ fn main() {
     // }
 
     // 9
+    // let mut names: Vec<String> = Vec::new();
+    // let mut i = 0;
+    // while i < 20 {
+    //     let name = get_string("Type a name and his lastname: ");
+    //     if name == "FIM" {
+    //         break;
+    //     }
+    //     names.push(name);
+    //     i += 1;
+    // }
+
+    // let mut lastnames = names.clone();
+    // lastnames.sort_by(|a, b| {
+    //     let last_a = a.split_whitespace().last().unwrap_or("");
+    //     let last_b = b.split_whitespace().last().unwrap_or("");
+
+    //     // Se os sobrenomes forem iguais, ordena pelo nome completo
+    //     last_a.cmp(last_b).then(a.cmp(b))
+    // });
+    // names.sort();
+
+    // println!("Sorted by name: {:?}", names);
+    // println!("Sorted by lastname: {:?}", lastnames);
+
+    // 10
+    // let mut name = get_string("Type yout name, we'll remove all 'a' occurences from it: ");
+    // removechar(&mut name, 'a');
+    // println!("{name}");
+    // fn removechar(input: &mut String, c: char) {
+    //     input.retain(|ch| ch != c);
+    // }
+
+    // 11
+    // let mut input = get_string("Type anything: ");
+    // addchar(&mut input, 'A', 7);
+    // println!("{input}");
+    // fn addchar(input: &mut String, c: char, pos: usize) {
+    //     input.insert(pos, c);
+    // }
+
+    //12 skipped
+    // let result = conv2dec("345".to_string(), 8);
+    // println!("{result}");
+    // fn conv2dec(number_str: String, base_int: i32) -> i32 {
+    //     let numbers: Vec<char> = number_str.chars().collect();
+    //     let mut total = 0;
+    //     for (i, c) in numbers.iter().rev().enumerate() {
+    //         let number = char_to_value(*c);
+    //         total += number * base_int.pow(i as u32);
+    //     }
+
+    //     total
+    // }
+
+    // fn char_to_value(c: char) -> i32 {
+    //     match c {
+    //         '0'..='9' => (c as u8 - b'0') as i32,
+    //         'A'..='Z' => (c as u8 - b'A' + 10) as i32,
+    //         'a'..='z' => (c as u8 - b'a' + 36) as i32,
+    //         _ => panic!("INVALID CHAR"),
+    //     }
+    // }
+
+    /*
+         Grupo VIII - Passagem de parâmetros e estruturas
+    1. Fazer uma função que retorna a soma, a diferença e o produto entre dois
+    números.
+    */
 }
