@@ -23,21 +23,35 @@ fn get_string(input_msg: &str) -> String {
 }
 
 fn get_int(input_msg: &str) -> i32 {
-    let mut input = String::new();
-    print!("{input_msg}");
-    io::stdout().flush().unwrap();
-    io::stdin().read_line(&mut input).unwrap();
+    loop {
+        let mut input = String::new();
+        print!("{input_msg}");
+        io::stdout().flush().unwrap();
+        io::stdin().read_line(&mut input).unwrap();
 
-    input.trim().parse().unwrap()
+        match input.trim().parse() {
+            Ok(num) => return num,
+            Err(_) => {
+                println!("Invalid input");
+            }
+        }
+    }
 }
 
 fn get_double(input_msg: &str) -> f64 {
-    let mut input = String::new();
-    print!("{input_msg}");
-    io::stdout().flush().unwrap();
-    io::stdin().read_line(&mut input).unwrap();
+    loop {
+        let mut input = String::new();
+        print!("{input_msg}");
+        io::stdout().flush().unwrap();
+        io::stdin().read_line(&mut input).unwrap();
 
-    input.trim().parse().unwrap()
+        match input.trim().parse() {
+            Ok(num) => return num,
+            Err(_) => {
+                println!("Invalid input");
+            }
+        }
+    }
 }
 
 fn main() {
