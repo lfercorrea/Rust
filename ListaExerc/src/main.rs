@@ -942,62 +942,130 @@ fn main() {
         long int CEP;
         Obs: a agenda deve ter capacidade para 100 entradas.
          */
-    struct Contato {
-        nome: String,
-        endereco: String,
-        fone: String,
-        cep: i32,
-    }
+    // struct Contato {
+    //     nome: String,
+    //     endereco: String,
+    //     fone: String,
+    //     cep: i32,
+    // }
 
-    let mut agenda: Vec<Contato> = Vec::new();
+    // let mut agenda: Vec<Contato> = Vec::new();
 
-    loop {
-        println!(
-            "Menu principal do programa:\n\n\
-            1. Entrar um novo nome na agenda\n\
-            2. Imprimir na tela os dados de uma das pessoas cadastradas\n\
-            3. Imprimir a lista de nomes cadastrados que comecem pela letra indicada\n\
-            4. Fim"
-        );
+    // loop {
+    //     println!(
+    //         "Menu principal do programa:\n\n\
+    //         1. Entrar um novo nome na agenda\n\
+    //         2. Imprimir na tela os dados de uma das pessoas cadastradas\n\
+    //         3. Imprimir a lista de nomes cadastrados que comecem pela letra indicada\n\
+    //         4. Fim"
+    //     );
 
-        let option: i32 = get_int("Escolha uma opção: ");
-        match option {
-            1 => {
-                let contato: Contato = get_person();
-                agenda.push(contato);
-            }
-            2 => {
-                for contato in &agenda {
-                    println!("nome: {}", contato.nome);
-                }
-            }
-            3 => {
-                let letra = get_string("Digite uma letra para listar: ");
-                for contato in &agenda {
-                    if contato.nome.starts_with(&letra) {
-                        println!("nome: {}", contato.nome);
-                    }
-                }
-            }
-            4 => {
-                println!("Saindo...");
-                return;
-            }
-            _ => panic!("Opção inválida"),
-        }
-    }
+    //     let option: i32 = get_int("Escolha uma opção: ");
+    //     match option {
+    //         1 => {
+    //             let contato: Contato = get_person();
+    //             agenda.push(contato);
+    //         }
+    //         2 => {
+    //             for contato in &agenda {
+    //                 println!("nome: {}", contato.nome);
+    //             }
+    //         }
+    //         3 => {
+    //             let letra = get_string("Digite uma letra para listar: ");
+    //             for contato in &agenda {
+    //                 if contato.nome.starts_with(&letra) {
+    //                     println!("nome: {}", contato.nome);
+    //                 }
+    //             }
+    //         }
+    //         4 => {
+    //             println!("Saindo...");
+    //             return;
+    //         }
+    //         _ => panic!("Opção inválida"),
+    //     }
+    // }
 
-    fn get_person() -> Contato {
-        let nome = get_string("Insira o nome do contato: ");
-        let endereco = get_string("Insira o endereço do contato: ");
-        let cep = get_int("Insira o cep do contato: ");
-        let fone = get_string("Insira o telefone do contato: ");
+    // fn get_person() -> Contato {
+    //     let nome = get_string("Insira o nome do contato: ");
+    //     let endereco = get_string("Insira o endereço do contato: ");
+    //     let cep = get_int("Insira o cep do contato: ");
+    //     let fone = get_string("Insira o telefone do contato: ");
 
-        Contato {
-            nome,
-            endereco,
-            fone,
-            cep,
-        }
-    }
+    //     Contato {
+    //         nome,
+    //         endereco,
+    //         fone,
+    //         cep,
+    //     }
+    // }
+
+    /*
+    6. Fazer um programa em "rust" que lê uma lista de 20 produtos e e precós e
+    armazêna-os em um array do tipo da estrutura abaixo. O programa deve, em
+    seguida, ordenar o vetor em ordem alfabética de nome de produto e inflacionar
+    os produtos cujo valor for menor que 100 em 5%. Por fim a lista de
+    produtos/preços deve ser impressa.
+
+    OBS: usar uma rotina que recebe uma estrutura do tipo PROD com parâmetro
+    e atualiza o preço, uma que lê os dados para a estrutura do tipo PROD e outra
+    capaz de imprimir a estrutura.
+
+    typedef struct
+    {
+        char nome[80];
+        float preco;
+    } PROD;
+    //  */
+    // struct Product {
+    //     name: String,
+    //     price: f64,
+    // }
+
+    // let mut products: Vec<Product> = Vec::new();
+    // get_prod(&mut products);
+
+    // for product in products {
+    //     print_prod(product);
+    // }
+
+    // fn get_prod(products: &mut Vec<Product>) {
+    //     let mut i = 0;
+
+    //     while i < 2 {
+    //         let name = get_string("Type the product name: ");
+    //         let price = get_double("Type the product price: ");
+    //         let mut prod = Product { name, price };
+
+    //         if price < 100.0 {
+    //             inflate_prices(&mut prod);
+    //         }
+    //         products.push(prod);
+    //         i += 1;
+    //     }
+
+    //     products.sort_by(|a, b| a.name.cmp(&b.name));
+    // }
+
+    // fn inflate_prices(p: &mut Product) {
+    //     p.price *= 1.0 + 0.05;
+    // }
+
+    // fn print_prod(p: Product) {
+    //     println!(
+    //         "Product Summary\n\n\
+    //         Product Name: {}\n\
+    //         Price US$ {:.2}",
+    //         p.name, p.price
+    //     );
+    // }
+
+    /* 7. Construir um programa em "C" que implementa uma agenda eletrônica. O
+    programa deve ter um menu com as seguintes opções:
+    1- Entrar um nome na agenda
+    2- Imprimir na tela os dados de uma das pessoas cadastradas (consulta por
+    nome)
+    3- Imprimir na impressora a lista dos nomes que começam pela letra indicada
+     */
 }
