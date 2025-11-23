@@ -1061,11 +1061,83 @@ fn main() {
     //     );
     // }
 
-    /* 7. Construir um programa em "C" que implementa uma agenda eletrônica. O
+    /* 7. Construir um programa em "rust" que implementa uma agenda eletrônica. O
     programa deve ter um menu com as seguintes opções:
     1- Entrar um nome na agenda
     2- Imprimir na tela os dados de uma das pessoas cadastradas (consulta por
     nome)
     3- Imprimir na impressora a lista dos nomes que começam pela letra indicada
      */
+    struct Contato {
+        nome: String,
+        endereco: String,
+        fone: String,
+        cep: i32,
+    }
+
+    let mut agenda: Vec<Contato> = Vec::new();
+
+    loop {
+        println!(
+            "Menu principal do programa:\n\n\
+            1. Entrar um novo nome na agenda\n\
+            2. Imprimir na tela os dados de uma das pessoas cadastradas\n\
+            3. Imprimir a lista de nomes cadastrados que comecem pela letra indicada\n\
+            4. Pesquisar contato pelo nome\n\
+            5. Fim"
+        );
+
+        let option: i32 = get_int("Escolha uma opção: ");
+        match option {
+            1 => {
+                let contato: Contato = get_person();
+                agenda.push(contato);
+            }
+            2 => {
+                for contato in &agenda {
+                    println!("nome: {}", contato.nome);
+                }
+            }
+            3 => {
+                let letra = get_string("Digite uma letra para listar: ");
+                for contato in &agenda {
+                    if contato.nome.starts_with(&letra) {
+                        println!("nome: {}", contato.nome);
+                    }
+                }
+            }
+            4 => {
+                let busca = get_string("Digite o nome para pesquisar: ");
+                let mut encontrado = false;
+                for contato in &agenda {
+                    if contato.nome.contains(&busca) {
+                        println!("Nome: {}", contato.nome);
+                        encontrado = true;
+                    }
+                }
+                if !encontrado {
+                    println!("Nenhum contato foi encontrado para a busca '{}'", busca);
+                }
+            }
+            5 => {
+                println!("Saindo...");
+                return;
+            }
+            _ => panic!("Opção inválida"),
+        }
+    }
+
+    fn get_person() -> Contato {
+        let nome = get_string("Insira o nome do contato: ");
+        let endereco = get_string("Insira o endereço do contato: ");
+        let cep = get_int("Insira o cep do contato: ");
+        let fone = get_string("Insira o telefone do contato: ");
+
+        Contato {
+            nome,
+            endereco,
+            fone,
+            cep,
+        }
+    }
 }
