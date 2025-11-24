@@ -32,7 +32,10 @@ fn main() {
         };
         print_hangman(&selected_word, correct_chars, &state);
         while state.playing {
-            let guess = get_char("Type a letter to guess: ");
+            let guess = get_char("Type a letter to guess: ")
+                .to_uppercase()
+                .next()
+                .unwrap();
             println!("[ DEBUG ] {:?}, char: {}", selected_word, guess);
             build_hangman(&selected_word, guess, &mut correct_chars, &mut state);
             print_hangman(&selected_word, correct_chars, &state);
@@ -62,7 +65,7 @@ fn load_file(words: &mut Vec<String>, infile: &str) {
     let reader = BufReader::new(file);
     for line in reader.lines() {
         let line = match line {
-            Ok(l) => l,
+            Ok(l) => l.to_uppercase(),
             Err(e) => {
                 println!("Error reading line: {e}");
                 return;
