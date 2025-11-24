@@ -76,7 +76,7 @@ fn load_file(words: &mut Vec<String>, infile: &str) {
 fn build_hangman(word: &[char], guess: char, correct_chars: &mut [bool; 50], state: &mut State) {
     let mut hit: bool = false;
     for (i, &ch) in word.iter().enumerate() {
-        if ch == guess && !correct_chars[i] {
+        if (ch == guess || ch == '-') && !correct_chars[i] {
             correct_chars[i] = true;
             hit = true;
             state.remaining -= 1;
