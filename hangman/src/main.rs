@@ -18,7 +18,12 @@ fn main() {
     loop {
         let mut words: Vec<String> = Vec::new();
         load_file(&mut words, "input.txt");
-        let selected_word: Vec<char> = select_word(&words).chars().collect();
+        // let selected_word: Vec<char> = select_word(&words).chars().collect();
+        let opt_selected_word = select_word(&words);
+        let selected_word: Vec<char> = match opt_selected_word {
+            Some(w) => w.chars().collect(),
+            None => panic!("Without the file, this program can't run anymore."),
+        };
         let mut correct_chars: [bool; 50] = [false; 50];
         let mut state = State {
             corrects: 0,
@@ -36,13 +41,8 @@ fn main() {
                 .to_uppercase()
                 .next()
                 .unwrap();
-            println!("[ DEBUG ] {:?}, char: {}", selected_word, guess);
             build_hangman(&selected_word, guess, &mut correct_chars, &mut state);
             print_hangman(&selected_word, correct_chars, &state);
-            println!(
-                "[ DEBUG ] corrects: {}\nmisses: {}\nplaying: {}\nwon: {}\nlose: {}",
-                state.corrects, state.misses, state.playing, state.won, state.lose
-            );
         }
 
         if !state.playing {
@@ -58,7 +58,7 @@ fn load_file(words: &mut Vec<String>, infile: &str) {
     let file = match File::open(infile) {
         Ok(f) => f,
         Err(e) => {
-            println!("Error opening the file: {e}");
+            println!("Error opening the file {infile}: {e}");
             return;
         }
     };
@@ -75,7 +75,6 @@ fn load_file(words: &mut Vec<String>, infile: &str) {
             continue;
         }
 
-        println!("[ DEBUG ] palavra lida do arquivo: {line}");
         words.push(line);
     }
 }
@@ -109,8 +108,6 @@ fn build_hangman(word: &[char], guess: char, correct_chars: &mut [bool; 50], sta
         state.playing = false;
         state.lose = false;
     }
-
-    println!("[ DEBUG ] remaining: {}", state.remaining)
 }
 
 fn print_hangman(word: &[char], correct_chars: [bool; 50], state: &State) {
@@ -154,11 +151,14 @@ fn print_hangman(word: &[char], correct_chars: [bool; 50], state: &State) {
     }
 }
 
-fn select_word(words: &[String]) -> String {
+fn select_word(words: &[String]) -> Option<String> {
+    if words.is_empty() {
+        return None;
+    }
+
     let mut rng = rand::thread_rng();
     let rand_number = rng.gen_range(0..(words.len()));
     let selected_word = &words[rand_number];
-    println!("[ DEBUG ] palavra sorteada: {}", selected_word);
 
-    selected_word.clone()
+    Some(selected_word.clone())
 }
