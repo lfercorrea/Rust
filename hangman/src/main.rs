@@ -6,29 +6,44 @@ use std::io::{BufRead, BufReader};
 struct State {
     corrects: i32,
     misses: i32,
+    remaining: usize,
     won: bool,
     lose: bool,
     playing: bool,
 }
 
 fn main() {
-    let mut state = State {
-        corrects: 0,
-        misses: 0,
-        won: false,
-        lose: false,
-        playing: true,
-    };
-    let mut words: Vec<String> = Vec::new();
-    load_file(&mut words, "input.txt");
-    let selected_word: Vec<char> = select_word(&words).chars().collect();
-    while state.playing {
-        let guess = get_char("Type a letter to guess: ");
-        println!("{:?}, char: {}", selected_word, guess);
-
+    loop {
+        let mut words: Vec<String> = Vec::new();
+        load_file(&mut words, "input.txt");
+        let selected_word: Vec<char> = select_word(&words).chars().collect();
         let mut correct_chars: [bool; 50] = [false; 50];
-        build_hangman(&selected_word, guess, &mut correct_chars, &mut state);
-        print_hangman(&selected_word, correct_chars, &state);
+        let mut state = State {
+            corrects: 0,
+            misses: 0,
+            remaining: selected_word.len(),
+            won: false,
+            lose: false,
+            playing: true,
+        };
+
+        while state.playing {
+            let guess = get_char("Type a letter to guess: ");
+            println!("{:?}, char: {}", selected_word, guess);
+            build_hangman(&selected_word, guess, &mut correct_chars, &mut state);
+            print_hangman(&selected_word, correct_chars, &state);
+            println!(
+                "corrects: {}\nmisses: {}\nplaying: {}\nwon: {}\nlose: {}",
+                state.corrects, state.misses, state.playing, state.won, state.lose
+            );
+        }
+
+        if !state.playing {
+            let option = get_char("Do you would like to play again? (y/n)");
+            if option == 'n' {
+                return;
+            }
+        }
     }
 }
 
@@ -40,7 +55,6 @@ fn load_file(words: &mut Vec<String>, infile: &str) {
             return;
         }
     };
-
     let reader = BufReader::new(file);
     for line in reader.lines() {
         let line = match line {
@@ -61,31 +75,33 @@ fn load_file(words: &mut Vec<String>, infile: &str) {
 
 fn build_hangman(word: &[char], guess: char, correct_chars: &mut [bool; 50], state: &mut State) {
     let mut hit: bool = false;
-    let mut remaining = word.len();
     for (i, &ch) in word.iter().enumerate() {
-        if ch == guess {
+        if ch == guess && !correct_chars[i] {
             correct_chars[i] = true;
             hit = true;
-            remaining -= 1;
+            state.remaining -= 1;
         }
     }
 
-    let mut corrects_count = 0;
-    let mut misses_count = 0;
     if hit {
-        corrects_count += 1;
+        state.corrects += 1;
     } else {
-        misses_count += 1;
+        state.misses += 1;
     }
 
-    if remaining == 0 {
+    if state.misses >= 6 {
+        state.lose = true;
+        state.playing = false;
+        state.won = false;
+    }
+
+    if state.remaining == 0 {
         state.won = true;
         state.playing = false;
         state.lose = false;
     }
 
-    state.corrects = corrects_count;
-    state.misses = misses_count;
+    println!("remaining: {}", state.remaining)
 }
 
 fn print_hangman(word: &[char], correct_chars: [bool; 50], state: &State) {
@@ -108,6 +124,17 @@ fn print_hangman(word: &[char], correct_chars: [bool; 50], state: &State) {
         } else {
             print!("_")
         }
+    }
+
+    if state.won {
+        println!("\n\n\x1b[1;36mYYYEEAHHHH!!! You've saved the hangman!\x1b[0m\n");
+    }
+
+    if state.lose {
+        println!(
+            "\n\n\x1b[1;31mYou killed the hangman!\x1b[0m The word was: \x1b[1m{}\x1b[0m\n",
+            word.iter().collect::<String>()
+        );
     }
 
     println!();
