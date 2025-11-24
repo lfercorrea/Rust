@@ -6,6 +6,8 @@ use std::io::{BufRead, BufReader};
 struct State {
     corrects: i32,
     misses: i32,
+    correct_chars: String,
+    missed_chars: String,
     remaining: usize,
     won: bool,
     lose: bool,
@@ -21,6 +23,8 @@ fn main() {
         let mut state = State {
             corrects: 0,
             misses: 0,
+            correct_chars: String::new(),
+            missed_chars: String::new(),
             remaining: selected_word.len(),
             won: false,
             lose: false,
@@ -85,8 +89,10 @@ fn build_hangman(word: &[char], guess: char, correct_chars: &mut [bool; 50], sta
 
     if hit {
         state.corrects += 1;
+        state.correct_chars.push(guess);
     } else {
         state.misses += 1;
+        state.missed_chars.push(guess);
     }
 
     if state.misses >= 6 {
@@ -128,6 +134,11 @@ fn print_hangman(word: &[char], correct_chars: [bool; 50], state: &State) {
     }
 
     println!("\n");
+    println!(
+        "\x1b[1;37mCorrect chars: \x1b[32m{}\x1b[0m\t\
+        \x1b[1;37mMissed chars: \x1b[31m{}\x1b[0m\n",
+        state.correct_chars, state.missed_chars
+    );
     if state.won {
         println!("\x1b[1;36mYYYEEAHHHH!!! You've saved the hangman!\x1b[0m\n");
     }
@@ -142,7 +153,7 @@ fn print_hangman(word: &[char], correct_chars: [bool; 50], state: &State) {
 
 fn select_word(words: &[String]) -> String {
     let mut rng = rand::thread_rng();
-    let rand_number = rng.gen_range(0..(words.len() - 1));
+    let rand_number = rng.gen_range(0..(words.len()));
     let selected_word = &words[rand_number];
     println!("[ DEBUG ] palavra sorteada: {}", selected_word);
 
