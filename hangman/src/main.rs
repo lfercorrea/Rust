@@ -26,20 +26,20 @@ fn main() {
             lose: false,
             playing: true,
         };
-
+        print_hangman(&selected_word, correct_chars, &state);
         while state.playing {
             let guess = get_char("Type a letter to guess: ");
-            println!("{:?}, char: {}", selected_word, guess);
+            println!("[ DEBUG ] {:?}, char: {}", selected_word, guess);
             build_hangman(&selected_word, guess, &mut correct_chars, &mut state);
             print_hangman(&selected_word, correct_chars, &state);
             println!(
-                "corrects: {}\nmisses: {}\nplaying: {}\nwon: {}\nlose: {}",
+                "[ DEBUG ] corrects: {}\nmisses: {}\nplaying: {}\nwon: {}\nlose: {}",
                 state.corrects, state.misses, state.playing, state.won, state.lose
             );
         }
 
         if !state.playing {
-            let option = get_char("Do you would like to play again? (y/n)");
+            let option = get_char("Do you would like to play again? (y/n): ");
             if option == 'n' {
                 return;
             }
@@ -68,7 +68,7 @@ fn load_file(words: &mut Vec<String>, infile: &str) {
             continue;
         }
 
-        println!("[ DEBUG ]: {line}");
+        println!("[ DEBUG ] palavra lida do arquivo: {line}");
         words.push(line);
     }
 }
@@ -101,10 +101,11 @@ fn build_hangman(word: &[char], guess: char, correct_chars: &mut [bool; 50], sta
         state.lose = false;
     }
 
-    println!("remaining: {}", state.remaining)
+    println!("[ DEBUG ] remaining: {}", state.remaining)
 }
 
 fn print_hangman(word: &[char], correct_chars: [bool; 50], state: &State) {
+    println!();
     let stages = [
         "  +---+\n  |   |\n  |    \n  |    \n  |    \n  |    \n",
         "  +---+\n  |   |\n  |   O\n  |    \n  |    \n  |    \n",
@@ -119,37 +120,31 @@ fn print_hangman(word: &[char], correct_chars: [bool; 50], state: &State) {
     print!("{}", stages[stage as usize]);
     print!("  + ");
     for (i, &ch) in word.iter().enumerate() {
-        if correct_chars[i] {
+        if correct_chars[i] || ch == '-' {
             print!("{}", ch)
         } else {
             print!("_")
         }
     }
 
+    println!("\n");
     if state.won {
-        println!("\n\n\x1b[1;36mYYYEEAHHHH!!! You've saved the hangman!\x1b[0m\n");
+        println!("\x1b[1;36mYYYEEAHHHH!!! You've saved the hangman!\x1b[0m\n");
     }
 
     if state.lose {
         println!(
-            "\n\n\x1b[1;31mYou killed the hangman!\x1b[0m The word was: \x1b[1m{}\x1b[0m\n",
+            "\x1b[1;31mYou've killed the hangman!\x1b[0m The word was: \x1b[1m{}\x1b[0m\n",
             word.iter().collect::<String>()
         );
     }
-
-    println!();
 }
 
 fn select_word(words: &[String]) -> String {
     let mut rng = rand::thread_rng();
     let rand_number = rng.gen_range(0..(words.len() - 1));
     let selected_word = &words[rand_number];
-    selected_word
-        .chars()
-        .map(|_| '_')
-        .for_each(|c| print!("{}", c));
-    println!();
-    println!("Random: {}", selected_word);
+    println!("[ DEBUG ] palavra sorteada: {}", selected_word);
 
     selected_word.clone()
 }
