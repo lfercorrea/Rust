@@ -1,5 +1,6 @@
 use myrustlib::{self, get_char};
 use rand::Rng;
+use std::env;
 use std::fs::File;
 use std::io::{BufRead, BufReader};
 
@@ -15,10 +16,16 @@ struct State {
 }
 
 fn main() {
+    let argv: Vec<String> = env::args().collect();
+    let argc = argv.len();
+    if argc < 2 {
+        println!("Usage: {} <dictionary file>", argv[0]);
+        return;
+    }
+
     loop {
         let mut words: Vec<String> = Vec::new();
-        load_file(&mut words, "input.txt");
-        // let selected_word: Vec<char> = select_word(&words).chars().collect();
+        load_file(&mut words, &argv[1]);
         let opt_selected_word = select_word(&words);
         let selected_word: Vec<char> = match opt_selected_word {
             Some(w) => w.chars().collect(),
