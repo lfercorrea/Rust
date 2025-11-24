@@ -111,7 +111,7 @@ fn build_hangman(word: &[char], guess: char, correct_chars: &mut [bool; 50], sta
 }
 
 fn print_hangman(word: &[char], correct_chars: [bool; 50], state: &State) {
-    println!();
+    println!("\x1b[2J\x1b[1;1H");
     let stages = [
         "  +---+\n  |   |\n  |    \n  |    \n  |    \n  |    \n",
         "  +---+\n  |   |\n  |   O\n  |    \n  |    \n  |    \n",
