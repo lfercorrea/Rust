@@ -5,6 +5,7 @@ use std::fs::File;
 use std::io::{BufRead, BufReader};
 
 struct State {
+    greetings: bool,
     corrects: i32,
     misses: i32,
     correct_chars: String,
@@ -33,6 +34,7 @@ fn main() {
         };
         let mut correct_chars: [bool; 50] = [false; 50];
         let mut state = State {
+            greetings: true,
             corrects: 0,
             misses: 0,
             correct_chars: String::new(),
@@ -42,17 +44,17 @@ fn main() {
             lose: false,
             playing: true,
         };
-        print_hangman(&selected_word, correct_chars, &state);
         while state.playing {
+            print_hangman(&selected_word, correct_chars, &state);
             let guess = get_char("Type a letter to guess: ")
                 .to_uppercase()
                 .next()
                 .unwrap();
             build_hangman(&selected_word, guess, &mut correct_chars, &mut state);
-            print_hangman(&selected_word, correct_chars, &state);
         }
 
         if !state.playing {
+            print_hangman(&selected_word, correct_chars, &state);
             let option = get_char("Do you would like to play again? (y/n): ");
             if option == 'n' {
                 return;
@@ -119,6 +121,23 @@ fn build_hangman(word: &[char], guess: char, correct_chars: &mut [bool; 50], sta
 
 fn print_hangman(word: &[char], correct_chars: [bool; 50], state: &State) {
     println!("\x1b[2J\x1b[1;1H");
+    if state.greetings {
+        println!(
+            r"
+     /$$   /$$                                                                
+    | $$  | $$                                                                
+    | $$  | $$  /$$$$$$  /$$$$$$$   /$$$$$$  /$$$$$$/$$$$   /$$$$$$  /$$$$$$$ 
+    | $$$$$$$$ |____  $$| $$__  $$ /$$__  $$| $$_  $$_  $$ |____  $$| $$__  $$
+    | $$__  $$  /$$$$$$$| $$  \ $$| $$  \ $$| $$ \ $$ \ $$  /$$$$$$$| $$  \ $$
+    | $$  | $$ /$$__  $$| $$  | $$| $$  | $$| $$ | $$ | $$ /$$__  $$| $$  | $$
+    | $$  | $$|  $$$$$$$| $$  | $$|  $$$$$$$| $$ | $$ | $$|  $$$$$$$| $$  | $$
+    |__/  |__/ \_______/|__/  |__/ \____  $$|__/ |__/ |__/ \_______/|__/  |__/
+                                   /$$  \ $$                                  
+                                  |  $$$$$$/                                  
+                                   \______/                                   
+        "
+        );
+    }
     let stages = [
         "  +---+\n  |   |\n  |    \n  |    \n  |    \n  |    \n",
         "  +---+\n  |   |\n  |   O\n  |    \n  |    \n  |    \n",
