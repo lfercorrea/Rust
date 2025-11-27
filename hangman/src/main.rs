@@ -1,4 +1,4 @@
-use myrustlib::{self, get_char};
+use myrustlib::{self, get_char, get_string};
 use rand::Rng;
 use std::env;
 use std::fs::File;
@@ -32,7 +32,7 @@ fn main() {
             Some(w) => w.chars().collect(),
             None => panic!("Without the file, this program can't run anymore."),
         };
-        let mut correct_chars: [bool; 50] = [false; 50];
+        let mut correct_chars: Vec<bool> = vec![false; selected_word.len()];
         let mut state = State {
             greetings: true,
             corrects: 0,
@@ -45,16 +45,16 @@ fn main() {
             playing: true,
         };
         while state.playing {
-            print_hangman(&selected_word, correct_chars, &state);
-            let guess = get_char("Type a letter to guess: ")
-                .to_uppercase()
-                .next()
-                .unwrap();
-            build_hangman(&selected_word, guess, &mut correct_chars, &mut state);
+            print_hangman(&selected_word, &correct_chars, &state);
+            let guess =
+                get_string("Type a letter to guess how to free de Hangman: ").to_uppercase();
+            for ch in guess.chars() {
+                build_hangman(&selected_word, ch, &mut correct_chars, &mut state);
+            }
         }
 
         if !state.playing {
-            print_hangman(&selected_word, correct_chars, &state);
+            print_hangman(&selected_word, &correct_chars, &state);
             let option = get_char("Do you would like to play again? (y/n): ");
             if option == 'n' {
                 return;
@@ -88,7 +88,7 @@ fn load_file(words: &mut Vec<String>, infile: &str) {
     }
 }
 
-fn build_hangman(word: &[char], guess: char, correct_chars: &mut [bool; 50], state: &mut State) {
+fn build_hangman(word: &[char], guess: char, correct_chars: &mut [bool], state: &mut State) {
     let mut hit: bool = false;
     for (i, &ch) in word.iter().enumerate() {
         if (ch == guess || ch == '-') && !correct_chars[i] {
@@ -119,7 +119,7 @@ fn build_hangman(word: &[char], guess: char, correct_chars: &mut [bool; 50], sta
     }
 }
 
-fn print_hangman(word: &[char], correct_chars: [bool; 50], state: &State) {
+fn print_hangman(word: &[char], correct_chars: &[bool], state: &State) {
     println!("\x1b[2J\x1b[1;1H");
     if state.greetings {
         println!(
