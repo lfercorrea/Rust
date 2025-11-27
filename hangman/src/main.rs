@@ -46,6 +46,7 @@ fn main() {
         };
         while state.playing {
             print_hangman(&selected_word, &correct_chars, &state);
+            state.greetings = false;
             let guess =
                 get_string("Type a letter to guess how to free de Hangman: ").to_uppercase();
             for ch in guess.chars() {
