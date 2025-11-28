@@ -20,7 +20,7 @@ fn main() {
     let argv: Vec<String> = env::args().collect();
     let argc = argv.len();
     if argc < 2 {
-        println!("Usage: {} <dictionary file>", argv[0]);
+        println!("Como usar: {} <arquivo de dicionário>", argv[0]);
         return;
     }
 
@@ -30,7 +30,7 @@ fn main() {
         let opt_selected_word = select_word(&words);
         let selected_word: Vec<char> = match opt_selected_word {
             Some(w) => w.chars().collect(),
-            None => panic!("Without the file, this program can't run anymore."),
+            None => panic!("O programa não pode rodar sem o arquivo de dicionário."),
         };
         let mut correct_chars: Vec<bool> = vec![false; selected_word.len()];
         let mut state = State {
@@ -47,8 +47,8 @@ fn main() {
         while state.playing {
             print_hangman(&selected_word, &correct_chars, &state);
             state.greetings = false;
-            let guess =
-                get_string("Type a letter to guess how to free de Hangman: ").to_uppercase();
+            let guess = get_string("Digite uma letra para tentar libertar o carinha da forca: ")
+                .to_uppercase();
             for ch in guess.chars() {
                 build_hangman(&selected_word, ch, &mut correct_chars, &mut state);
             }
@@ -56,7 +56,7 @@ fn main() {
 
         if !state.playing {
             print_hangman(&selected_word, &correct_chars, &state);
-            let option = get_char("Do you would like to play again? (y/n): ");
+            let option = get_char("Bora jogar mais uma? (s/n): ");
             if option == 'n' {
                 return;
             }
@@ -68,7 +68,7 @@ fn load_file(words: &mut Vec<String>, infile: &str) {
     let file = match File::open(infile) {
         Ok(f) => f,
         Err(e) => {
-            println!("Error opening the file {infile}: {e}");
+            println!("Erro ao abrir o arquivo {infile}: {e}");
             return;
         }
     };
@@ -77,7 +77,7 @@ fn load_file(words: &mut Vec<String>, infile: &str) {
         let line = match line {
             Ok(l) => l.to_uppercase(),
             Err(e) => {
-                println!("Error reading line: {e}");
+                println!("Erro ao ler a linha: {e}");
                 return;
             }
         };
@@ -162,17 +162,17 @@ fn print_hangman(word: &[char], correct_chars: &[bool], state: &State) {
 
     println!("\n");
     println!(
-        "\x1b[1;37mCorrect chars: \x1b[32m{}\x1b[0m\t\
-        \x1b[1;37mMissed chars: \x1b[31m{}\x1b[0m\n",
+        "\x1b[1;37mLetras corretas: \x1b[32m{}\x1b[0m\t\
+        \x1b[1;37mLetras erradas: \x1b[31m{}\x1b[0m\n",
         state.correct_chars, state.missed_chars
     );
     if state.won {
-        println!("\x1b[1;36mYYYEEAHHHH!!! You've saved the hangman!\x1b[0m\n");
+        println!("\x1b[1;36mYYYEEAHHHH!!! Você salvou nosso amiguinho da forca!\x1b[0m\n");
     }
 
     if state.lose {
         println!(
-            "\x1b[1;31mYou've killed the hangman!\x1b[0m The word was: \x1b[1m{}\x1b[0m\n",
+            "\x1b[1;31mVocê não adivinhou a palavra e acaba de cancelar o CPF do nosso pobre amiguinho.\x1b[0m A propósito, a palavra era: \x1b[1m{}\x1b[0m\n",
             word.iter().collect::<String>()
         );
     }
