@@ -24,9 +24,9 @@ fn main() {
         return;
     }
 
+    let mut words: Vec<String> = Vec::new();
+    load_file(&mut words, &argv[1]);
     loop {
-        let mut words: Vec<String> = Vec::new();
-        load_file(&mut words, &argv[1]);
         let opt_selected_word = select_word(&words);
         let selected_word: Vec<char> = match opt_selected_word {
             Some(w) => w.chars().collect(),
