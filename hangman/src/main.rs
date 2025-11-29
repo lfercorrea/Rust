@@ -1,6 +1,5 @@
 use myrustlib::{self, get_char, get_string};
 use rand::Rng;
-use std::env;
 use std::fs::File;
 use std::io::{BufRead, BufReader};
 
@@ -17,20 +16,13 @@ struct State {
 }
 
 fn main() {
-    let argv: Vec<String> = env::args().collect();
-    let argc = argv.len();
-    if argc < 2 {
-        println!("Como usar: {} <arquivo de dicionário>", argv[0]);
-        return;
-    }
-
     let mut words: Vec<String> = Vec::new();
-    load_file(&mut words, &argv[1]);
+    load_file(&mut words, "dic.txt");
     loop {
         let opt_selected_word = select_word(&words);
         let selected_word: Vec<char> = match opt_selected_word {
             Some(w) => w.chars().collect(),
-            None => panic!("O programa não pode rodar sem o arquivo de dicionário."),
+            None => panic!("O programa não pode rodar sem uma lista de palavras \"dic.txt\"."),
         };
         let mut correct_chars: Vec<bool> = vec![false; selected_word.len()];
         let mut state = State {
@@ -172,7 +164,8 @@ fn print_hangman(word: &[char], correct_chars: &[bool], state: &State) {
 
     if state.lose {
         println!(
-            "\x1b[1;31mVocê não adivinhou a palavra e acaba de cancelar o CPF do nosso pobre amiguinho.\x1b[0m A propósito, a palavra era: \x1b[1m{}\x1b[0m\n",
+            "\x1b[1;31mVocê não adivinhou a palavra e acaba de cancelar o CPF do nosso pobre amiguinho.\x1b[0m\n\
+            A propósito, a palavra era \"\x1b[1m{}\x1b[0m\".\n",
             word.iter().collect::<String>()
         );
     }
