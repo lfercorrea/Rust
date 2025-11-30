@@ -1,3 +1,5 @@
+use std::os::linux::raw::stat;
+
 use myrustlib::{self, get_i32};
 use rand::{self, Rng};
 
@@ -13,33 +15,54 @@ struct State {
     remaining_cells: u32,
     remaining_bombs: u32,
     discovered_cells: u32,
+    game_over: bool,
 }
 
 fn main() {
-    let board_size = get_i32("Type the board size (e.g. 8): ") as usize;
-    let bombs = get_i32("Type thow many bombs would you like to put in the board: ") as u32;
-    if bombs as usize >= (board_size * board_size) || bombs <= 0 {
-        panic!("Doesn't make any sense put amount of bombs in a minesweeper game. Exiting...")
+    loop {
+        let board_size = get_i32("Type the board size (e.g. 8): ") as usize;
+        let bombs = get_i32("Type thow many bombs would you like to put in the board: ") as u32;
+        if bombs as usize >= (board_size * board_size) {
+            panic!("Doesn't make any sense put amount of bombs in a minesweeper game. Exiting...")
+        }
+
+        let cell = Cell {
+            open: false,
+            contains_bomb: false,
+            interrogation: false,
+            neighbor: 0,
+        };
+        let mut state = State {
+            remaining_cells: (board_size * board_size) as u32,
+            remaining_bombs: bombs,
+            discovered_cells: 0,
+            game_over: false,
+        };
+        let mut board: Vec<Vec<Cell>> = vec![vec![cell; board_size]; board_size];
+
+        set_bombs(bombs, board_size, &mut board);
+        print_board(&board, board_size, &state);
+
+        loop {
+            if state.game_over {
+                break;
+            }
+
+            let row = get_i32("Type the row number: ");
+            let col = get_i32("Now, type the col number: ");
+            open_cell(
+                &mut board,
+                board_size,
+                row as usize,
+                col as usize,
+                &mut state,
+            );
+            print_board(&board, board_size, &state);
+        }
     }
-
-    let cell = Cell {
-        open: false,
-        contains_bomb: false,
-        interrogation: false,
-        neighbor: 0,
-    };
-    let mut state = State {
-        remaining_cells: (board_size * board_size) as u32,
-        remaining_bombs: bombs,
-        discovered_cells: 0,
-    };
-    let mut board: Vec<Vec<Cell>> = vec![vec![cell; board_size]; board_size];
-
-    set_bombs(bombs, board_size, &mut board);
-    print_board(&board, board_size, state);
 }
 
-fn set_bombs(bombs: u32, board_size: usize, board: &mut Vec<Vec<Cell>>) {
+fn set_bombs(bombs: u32, board_size: usize, board: &mut [Vec<Cell>]) {
     let mut rng = rand::rng();
     let mut planted = 0;
     while planted < bombs {
@@ -59,7 +82,7 @@ fn set_bombs(bombs: u32, board_size: usize, board: &mut Vec<Vec<Cell>>) {
     }
 }
 
-fn print_board(board: &[Vec<Cell>], board_size: usize, state: State) {
+fn print_board(board: &[Vec<Cell>], board_size: usize, state: &State) {
     println!("\x1b[2J\x1b[H\x1b[1;37mCurrent Board State:\x1b[0m ");
     for i in 0..board_size {
         for j in 0..board_size {
@@ -68,24 +91,24 @@ fn print_board(board: &[Vec<Cell>], board_size: usize, state: State) {
             }
 
             print!(" ");
-            if board[i][j].contains_bomb {
-                print!("\x1b[1;31mB\x1b[0m")
-            } else if board[i][j].interrogation {
-                print!("\x1b[1;35m?\x1b[0m")
-            } else {
-                let cell = &board[i][j];
-                if cell.neighbor == 0 {
-                    print!(".")
+            let cell = &board[i][j];
+            if cell.interrogation {
+                print!("\x1b[1;35m?\x1b[0m");
+            } else if cell.open || state.game_over {
+                if board[i][j].contains_bomb {
+                    print!("\x1b[1;31mB\x1b[0m")
                 } else {
                     print!("{}", cell.neighbor);
                 }
+            } else {
+                print!(".");
             }
         }
     }
 
     println!("\n");
     println!(
-        "\x1b[1;31mRemainning bombs: \x1b[1;37m{}\x1b[0m",
+        "\x1b[1;31mPlanted bombs: \x1b[1;37m{}\x1b[0m",
         state.remaining_bombs
     );
     println!(
@@ -98,7 +121,7 @@ fn print_board(board: &[Vec<Cell>], board_size: usize, state: State) {
     );
 }
 
-fn count_neighbor(row: usize, col: usize, board: &[Vec<Cell>], board_size: usize) -> u32 {
+fn count_neighbor(row: usize, col: usize, board: &mut [Vec<Cell>], board_size: usize) -> u32 {
     let mut count = 0;
     for r in -1isize..=1 {
         for c in -1isize..=1 {
@@ -123,4 +146,56 @@ fn count_neighbor(row: usize, col: usize, board: &[Vec<Cell>], board_size: usize
     }
 
     count
+}
+
+fn open_cell(
+    board: &mut [Vec<Cell>],
+    board_size: usize,
+    row: usize,
+    col: usize,
+    state: &mut State,
+) {
+    if row >= board_size || col >= board_size {
+        return;
+    }
+
+    let cell = &mut board[row][col];
+    if cell.open {
+        return;
+    }
+
+    cell.open = true;
+    state.discovered_cells += 1;
+    state.remaining_cells -= 1;
+
+    if cell.neighbor > 0 {
+        return;
+    }
+
+    if cell.contains_bomb {
+        state.game_over = true;
+
+        return;
+    }
+
+    if state.remaining_cells == 0 {
+        state.game_over = true;
+
+        return;
+    }
+
+    for r in -1isize..=1 {
+        for c in -1isize..=1 {
+            if r == 0 && c == 0 {
+                continue;
+            }
+
+            let nr = row as isize + r;
+            let nc = col as isize + c;
+
+            if nr >= 0 && nr < board_size as isize && nc >= 0 && nc < board_size as isize {
+                open_cell(board, board_size, nr as usize, nc as usize, state);
+            }
+        }
+    }
 }
