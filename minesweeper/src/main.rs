@@ -1,6 +1,6 @@
 use std::os::linux::raw::stat;
 
-use myrustlib::{self, get_i32};
+use myrustlib::{self, get_char, get_i32};
 use rand::{self, Rng};
 
 #[derive(Clone)]
@@ -44,20 +44,24 @@ fn main() {
         print_board(&board, board_size, &state);
 
         loop {
-            if state.game_over {
-                break;
-            }
-
-            let row = get_i32("Type the row number: ");
-            let col = get_i32("Now, type the col number: ");
+            let row = get_i32("\x1b[1;35mType the row number:\x1b[0m ");
+            let col = get_i32("\x1b[1;34mNow, type the col number:\x1b[0m ");
             open_cell(
                 &mut board,
                 board_size,
-                row as usize,
-                col as usize,
+                row as usize - 1,
+                col as usize - 1,
                 &mut state,
             );
             print_board(&board, board_size, &state);
+            if state.game_over {
+                let play = get_char("Would you like to play again? (y/n): ");
+                if play == 'n' {
+                    return;
+                } else {
+                    break;
+                }
+            }
         }
     }
 }
@@ -84,13 +88,18 @@ fn set_bombs(bombs: u32, board_size: usize, board: &mut [Vec<Cell>]) {
 
 fn print_board(board: &[Vec<Cell>], board_size: usize, state: &State) {
     println!("\x1b[2J\x1b[H\x1b[1;37mCurrent Board State:\x1b[0m ");
-    for i in 0..board_size {
-        for j in 0..board_size {
-            if j % board_size == 0 {
-                println!()
-            }
 
-            print!(" ");
+    let index_width = board_size.to_string().len();
+    print!("{:index_width$}", "");
+    for j in 1..=board_size {
+        print!(" \x1b[1;34m{:>index_width$}\x1b[0m", j);
+    }
+    println!();
+
+    for (i, _) in board.iter().enumerate() {
+        print!("\x1b[1;35m{:>index_width$}\x1b[0m", i + 1);
+        for (j, _) in board.iter().enumerate() {
+            print!("{:>index_width$}", " ");
             let cell = &board[i][j];
             if cell.interrogation {
                 print!("\x1b[1;35m?\x1b[0m");
@@ -104,6 +113,8 @@ fn print_board(board: &[Vec<Cell>], board_size: usize, state: &State) {
                 print!(".");
             }
         }
+
+        println!();
     }
 
     println!("\n");
@@ -119,6 +130,7 @@ fn print_board(board: &[Vec<Cell>], board_size: usize, state: &State) {
         "\x1b[1;36mRemainning cells: \x1b[1;37m{}\x1b[0m",
         state.remaining_cells
     );
+    println!();
 }
 
 fn count_neighbor(row: usize, col: usize, board: &mut [Vec<Cell>], board_size: usize) -> u32 {
