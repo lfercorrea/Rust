@@ -190,13 +190,6 @@ fn open_cell(
         return;
     }
 
-    if state.remaining_cells == state.remaining_bombs {
-        state.game_over = true;
-        state.won = true;
-
-        return;
-    }
-
     if cell.open {
         return;
     }
@@ -204,6 +197,13 @@ fn open_cell(
     cell.open = true;
     state.discovered_cells += 1;
     state.remaining_cells -= 1;
+
+    if state.remaining_cells == state.remaining_bombs {
+        state.game_over = true;
+        state.won = true;
+
+        return;
+    }
 
     if cell.neighbor > 0 {
         return;
@@ -220,6 +220,10 @@ fn open_cell(
 
             if nr >= 0 && nr < board_size as isize && nc >= 0 && nc < board_size as isize {
                 open_cell(board, board_size, nr as usize, nc as usize, state);
+
+                if state.won || state.lose {
+                    return;
+                }
             }
         }
     }
