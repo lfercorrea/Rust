@@ -91,29 +91,28 @@ fn print_board(board: &[Vec<Cell>], board_size: usize, state: &State) {
 
     let index_width = board_size.to_string().len();
     print!("{:index_width$}", "");
+
     for j in 1..=board_size {
         print!(" \x1b[1;34m{:>index_width$}\x1b[0m", j);
     }
     println!();
 
-    for (i, _) in board.iter().enumerate() {
+    for (i, row) in board.iter().enumerate() {
         print!("\x1b[1;35m{:>index_width$}\x1b[0m", i + 1);
-        for (j, _) in board.iter().enumerate() {
-            print!("{:>index_width$}", " ");
-            let cell = &board[i][j];
-            if cell.interrogation {
-                print!("\x1b[1;35m?\x1b[0m");
+        for cell in row {
+            let symbol = if cell.interrogation {
+                "?"
             } else if cell.open || state.game_over {
-                if board[i][j].contains_bomb {
-                    print!("\x1b[1;31mB\x1b[0m")
+                if cell.contains_bomb {
+                    "B"
                 } else {
-                    print!("{}", cell.neighbor);
+                    &cell.neighbor.to_string()
                 }
             } else {
-                print!(".");
-            }
+                "."
+            };
+            print!(" {:>index_width$}", symbol);
         }
-
         println!();
     }
 
