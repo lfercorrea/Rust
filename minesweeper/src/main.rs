@@ -55,7 +55,7 @@ fn main() {
             );
             print_board(&board, board_size, &state);
             if state.game_over {
-                let play = get_char("Would you like to play again? (y/n): ");
+                let play = get_char("\x1b[1;37mWould you like to play again? (y/n):\x1b[0m ");
                 if play == 'n' {
                     return;
                 } else {
@@ -130,6 +130,14 @@ fn print_board(board: &[Vec<Cell>], board_size: usize, state: &State) {
         state.remaining_cells
     );
     println!();
+
+    if state.game_over && state.remaining_cells != state.remaining_bombs {
+        println!("\x1b[1;31mBOOOMMM!! You've hit the bomb. GAME-OVER!\x1b[0m");
+    }
+
+    if state.game_over && state.remaining_cells == state.remaining_bombs {
+        println!("\x1b[1;32mYYYEEAHH!! You've nailed this game. CONGRATULATIONS!\x1b[0m");
+    }
 }
 
 fn count_neighbor(row: usize, col: usize, board: &mut [Vec<Cell>], board_size: usize) -> u32 {
@@ -171,6 +179,18 @@ fn open_cell(
     }
 
     let cell = &mut board[row][col];
+    if cell.contains_bomb || state.remaining_cells == 0 {
+        state.game_over = true;
+
+        return;
+    }
+
+    if state.remaining_cells == state.remaining_bombs {
+        state.game_over = true;
+
+        return;
+    }
+
     if cell.open {
         return;
     }
@@ -180,18 +200,6 @@ fn open_cell(
     state.remaining_cells -= 1;
 
     if cell.neighbor > 0 {
-        return;
-    }
-
-    if cell.contains_bomb {
-        state.game_over = true;
-
-        return;
-    }
-
-    if state.remaining_cells == 0 {
-        state.game_over = true;
-
         return;
     }
 
