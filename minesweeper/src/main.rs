@@ -7,7 +7,6 @@ use rand::{self, Rng};
 struct Cell {
     open: bool,
     contains_bomb: bool,
-    interrogation: bool,
     neighbor: u32,
 }
 
@@ -31,7 +30,6 @@ fn main() {
         let cell = Cell {
             open: false,
             contains_bomb: false,
-            interrogation: false,
             neighbor: 0,
         };
         let mut state = State {
@@ -104,18 +102,17 @@ fn print_board(board: &[Vec<Cell>], board_size: usize, state: &State) {
     for (i, row) in board.iter().enumerate() {
         print!("\x1b[1;35m{:>index_width$}\x1b[0m", i + 1);
         for cell in row {
-            let symbol = if cell.interrogation {
-                "?"
-            } else if cell.open || state.game_over {
+            let display_output = if cell.open || state.game_over {
                 if cell.contains_bomb {
-                    "B"
+                    let visible_padded = format!("{:>index_width$}", "B");
+                    format!("{}{}{}", "\x1b[1;31m", visible_padded, "\x1b[0m")
                 } else {
-                    &cell.neighbor.to_string()
+                    format!("{:>index_width$}", cell.neighbor.to_string())
                 }
             } else {
-                "."
+                format!("{:>index_width$}", ".")
             };
-            print!(" {:>index_width$}", symbol);
+            print!(" {}", display_output);
         }
         println!();
     }
