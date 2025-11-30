@@ -16,6 +16,8 @@ struct State {
     remaining_bombs: u32,
     discovered_cells: u32,
     game_over: bool,
+    won: bool,
+    lose: bool,
 }
 
 fn main() {
@@ -37,6 +39,8 @@ fn main() {
             remaining_bombs: bombs,
             discovered_cells: 0,
             game_over: false,
+            won: false,
+            lose: false,
         };
         let mut board: Vec<Vec<Cell>> = vec![vec![cell; board_size]; board_size];
 
@@ -131,11 +135,11 @@ fn print_board(board: &[Vec<Cell>], board_size: usize, state: &State) {
     );
     println!();
 
-    if state.game_over && state.remaining_cells != state.remaining_bombs {
+    if state.lose {
         println!("\x1b[1;31mBOOOMMM!! You've hit the bomb. GAME-OVER!\x1b[0m");
     }
 
-    if state.game_over && state.remaining_cells == state.remaining_bombs {
+    if state.won {
         println!("\x1b[1;32mYYYEEAHH!! You've nailed this game. CONGRATULATIONS!\x1b[0m");
     }
 }
@@ -179,14 +183,16 @@ fn open_cell(
     }
 
     let cell = &mut board[row][col];
-    if cell.contains_bomb || state.remaining_cells == 0 {
+    if cell.contains_bomb {
         state.game_over = true;
+        state.lose = true;
 
         return;
     }
 
     if state.remaining_cells == state.remaining_bombs {
         state.game_over = true;
+        state.won = true;
 
         return;
     }
