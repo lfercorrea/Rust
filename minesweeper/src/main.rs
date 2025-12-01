@@ -89,7 +89,7 @@ fn set_bombs(bombs: u32, board_size: usize, board: &mut [Vec<Cell>]) {
 }
 
 fn print_board(board: &[Vec<Cell>], board_size: usize, state: &State) {
-    println!("\x1b[2J\x1b[H\x1b[1;37mCurrent Board State:\x1b[0m ");
+    println!("\x1b[2J\x1b[H\x1b[1;37mCurrent Board State:\x1b[0m\n");
 
     let index_width = board_size.to_string().len();
     print!("{:index_width$}", "");
@@ -105,9 +105,25 @@ fn print_board(board: &[Vec<Cell>], board_size: usize, state: &State) {
             let display_output = if cell.open || state.game_over {
                 if cell.contains_bomb {
                     let visible_padded = format!("{:>index_width$}", "B");
-                    format!("{}{}{}", "\x1b[1;31m", visible_padded, "\x1b[0m")
+                    format!("{}{}{}", "\x1b[1;41;33m", visible_padded, "\x1b[0m")
                 } else {
-                    format!("{:>index_width$}", cell.neighbor.to_string())
+                    let neighbor_count = cell.neighbor.to_string();
+                    let visible_padded = format!("{:>index_width$}", neighbor_count);
+                    if cell.neighbor == 1 {
+                        format!("{}{}{}", "\x1b[1;36m", visible_padded, "\x1b[0m")
+                    } else if cell.neighbor == 2 {
+                        format!("{}{}{}", "\x1b[1;32m", visible_padded, "\x1b[0m")
+                    } else if cell.neighbor == 3 {
+                        format!("{}{}{}", "\x1b[1;33m", visible_padded, "\x1b[0m")
+                    } else if cell.neighbor == 4 {
+                        format!("{}{}{}", "\x1b[1;34m", visible_padded, "\x1b[0m")
+                    } else if cell.neighbor == 5 {
+                        format!("{}{}{}", "\x1b[1;35m", visible_padded, "\x1b[0m")
+                    } else if cell.neighbor >= 6 {
+                        format!("{}{}{}", "\x1b[1;31m", visible_padded, "\x1b[0m")
+                    } else {
+                        visible_padded
+                    }
                 }
             } else {
                 format!("{:>index_width$}", ".")
