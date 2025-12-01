@@ -59,9 +59,17 @@ const plurais: [&str; 7] = [
 ];
 
 fn main() {
-    let valor = get_f64("Escreva um valor qualquer: ");
+    loop {
+        let valor = get_f64("Escreva um valor qualquer: ");
 
-    let extenso = extenso_valor(valor);
+        if valor < 0.0 {
+            return;
+        }
+
+        let extenso = extenso_valor(valor);
+
+        println!("{}", extenso);
+    }
 }
 
 fn extenso_valor(valor: f64) -> String {
@@ -88,7 +96,7 @@ fn extenso_valor(valor: f64) -> String {
     }
 
     if partes.is_empty() {
-        return "Zero reais".to_string();
+        return "ZERO REAIS".to_string();
     }
 
     let texto = match partes.len() {
