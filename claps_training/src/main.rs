@@ -1,24 +1,26 @@
 use clap::Parser;
+use std::{
+    fs::File,
+    io::{Read, Write},
+};
 
 #[derive(Debug, Parser)]
 #[command(version, about, long_about = None)]
 struct Args {
     #[arg(short, long)]
-    filter: String,
-    #[arg(short, long, default_value_t = 1)]
-    ditter: u64,
-    #[arg(short = 'i', long, default_value_t = 1)]
-    depia: u64,
-    #[arg(short = 'o', long, default_value_t = 1)]
-    donochrome: u64,
-    #[arg(short, long, default_value_t = 1)]
-    manual: u64,
-    #[arg(short = 'r', long, default_value_t = 1)]
-    monochrome: u64,
+    infile: String,
+    #[arg(short, long)]
+    outfile: String,
 }
 
 fn main() {
     let args = Args::parse();
 
-    println!("Hello, {}!", args.filter);
+    let mut infile = File::open(args.infile).unwrap();
+    let mut outfile = File::create(args.outfile).unwrap();
+
+    let mut buf = Vec::new();
+
+    let _ = infile.read_to_end(&mut buf);
+    let _ = outfile.write_all(&buf);
 }
