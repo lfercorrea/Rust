@@ -1,7 +1,7 @@
 use regex::Regex;
 
 fn main() {
-    let re = Regex::new(r"[\t]*(\w*\s\w+):\s(\(\d{2}\)\s\d{5}-?\d{4})").unwrap();
+    let re = Regex::new(r"(?m)^\s*([^:]+):\s\((\d{2})\)\s(\d{5}-?\d{4})").unwrap();
     let text = "id=\"1pv8z9\"
         Ontem eu precisei ligar para várias pessoas e anotei os contatos assim:
 
@@ -20,7 +20,10 @@ fn main() {
         (22) 999999999
         (44) 91234-56789";
 
-    for (_, [name, number]) in re.captures_iter(text).map(|t| t.extract()) {
-        println!("Encontrado telefone de {}: '{}'", name, number);
+    for (_, [owner, code, number]) in re.captures_iter(text).map(|t| t.extract()) {
+        println!(
+            "Encontrado telefone: DDD: {}, número: {}, proprietário: {}",
+            code, number, owner
+        );
     }
 }
