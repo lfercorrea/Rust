@@ -33,39 +33,35 @@ pub fn get_string(msg: &str) -> String {
 }
 
 pub fn get_i32(msg: &str) -> i32 {
-    loop {
-        let mut input = String::new();
+    let mut input = String::new();
 
-        print!("{msg}");
-        io::stdout().flush().unwrap();
-        io::stdin()
-            .read_line(&mut input)
-            .expect("Error reading stdin");
+    print!("{msg}");
+    io::stdout().flush().unwrap();
+    io::stdin()
+        .read_line(&mut input)
+        .expect("Error reading stdin");
 
-        match input.trim().parse::<i32>() {
-            Ok(num) => return num,
-            Err(_) => {
-                panic!("Invalid input")
-            }
+    match input.trim().parse::<i32>() {
+        Ok(num) => num,
+        Err(_) => {
+            panic!("Invalid input")
         }
     }
 }
 
 pub fn get_f64(msg: &str) -> f64 {
-    loop {
-        let mut input = String::new();
+    let mut input = String::new();
 
-        print!("{msg}");
-        io::stdout().flush().unwrap();
-        io::stdin()
-            .read_line(&mut input)
-            .expect("Error reading stdin");
+    print!("{msg}");
+    io::stdout().flush().unwrap();
+    io::stdin()
+        .read_line(&mut input)
+        .expect("Error reading stdin");
 
-        match input.trim().parse::<f64>() {
-            Ok(num) => return num,
-            Err(_) => {
-                panic!("Invalid input");
-            }
+    match input.trim().parse::<f64>() {
+        Ok(num) => num,
+        Err(_) => {
+            panic!("Invalid input");
         }
     }
 }
