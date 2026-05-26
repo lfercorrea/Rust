@@ -8,4 +8,22 @@ fn main() {
     for string in positions {
         println!("{string}");
     }
+
+    let n = input.parse();
+
+    match n {
+        Ok(n) => {
+            fac(n);
+        }
+        Err(e) => panic!("Invalid input for convert into number: {e}"),
+    }
+}
+
+fn fac(n: u64) {
+    let mut prod = 1;
+    for i in 1..=n {
+        prod *= i;
+    }
+
+    println!("{prod}")
 }
