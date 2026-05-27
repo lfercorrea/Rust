@@ -1,4 +1,5 @@
 use myrustlib::{self, get_string};
+use std::io;
 
 fn main() {
     let input = get_string("Type something...: ");
