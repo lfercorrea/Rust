@@ -70,22 +70,22 @@ impl Matrix {
         }
     }
 
-    fn print(&self, height: usize, width: usize) {
+    fn print(&self) {
         let mut l_edge = true;
-        for i in 0..height {
-            for j in 0..width {
+        for i in 0..self.height {
+            for j in 0..self.width {
                 if l_edge {
                     print!("|\t");
                     l_edge = false;
                 }
 
-                print!("{}", self.data[i * width + j]);
+                print!("{}", self.data[i * self.width + j]);
 
-                if j > 0 || j < width {
+                if j > 0 || j < self.width {
                     print!("\t")
                 }
 
-                if j == width - 1 {
+                if j == self.width - 1 {
                     println!("|");
                     l_edge = true;
                 }
@@ -115,5 +115,5 @@ fn main() {
 
     let mtx_c = mtx_a.mul(mtx_b);
 
-    mtx_c.print(2, 2);
+    mtx_c.print();
 }
