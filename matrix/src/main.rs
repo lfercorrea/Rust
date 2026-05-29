@@ -1,20 +1,21 @@
-use myrustlib::get_i32;
+use myrustlib::get_f64;
 
+#[derive(Debug, Clone)]
 struct Matrix {
-    data: Vec<i64>,
+    data: Vec<f64>,
     height: usize,
     width: usize,
 }
 
 impl Matrix {
     fn new(rows: usize, cols: usize) -> Self {
-        let mut matrix = vec![0; rows * cols];
+        let mut matrix = vec![0.0; rows * cols];
         // let matrix: Vec<Vec<i64>> = (0..rows).map(|_| (0..cols).map(|_| 0).collect()).collect();
 
         for x in 0..rows {
             for y in 0..cols {
-                let n = get_i32("Type next matrix element: ");
-                matrix[x * cols + y] = n as i64;
+                let n = get_f64("Type next matrix element: ");
+                matrix[x * cols + y] = n;
             }
         }
 
@@ -25,12 +26,26 @@ impl Matrix {
         }
     }
 
+    fn det(&self) {
+        let mut m = self.clone();
+
+        for pivot in 0..self.height {
+            for row in (pivot + 1)..self.height {
+                //TODO: lookup for greater pivot in the triangular matrix
+                let factor = m.data[row * m.width + pivot] / m.data[pivot * m.width + pivot];
+                for col in pivot..self.width {
+                    m.data[row * self.width + col] -= factor * m.data[pivot * m.width + col];
+                }
+            }
+        }
+    }
+
     fn sum(&self, rhs_mtx: Matrix) -> Self {
         assert!(
             self.height == rhs_mtx.height && self.width == rhs_mtx.width,
             "The matrixes has incompatible dimensions to sum together."
         );
-        let mut new_mtx = vec![0; rhs_mtx.height * rhs_mtx.width];
+        let mut new_mtx = vec![0.0; rhs_mtx.height * rhs_mtx.width];
 
         for i in 0..self.height {
             for j in 0..self.width {
@@ -52,7 +67,7 @@ impl Matrix {
             "The matrixes haven't compatible dimensions to perform a multiplication."
         );
 
-        let mut new_mtx = vec![0; self.height * rhs_mtx.width];
+        let mut new_mtx = vec![0.0; self.height * rhs_mtx.width];
 
         for i in 0..self.height {
             for j in 0..rhs_mtx.width {
@@ -79,7 +94,7 @@ impl Matrix {
                     l_edge = false;
                 }
 
-                print!("{}", self.data[i * self.width + j]);
+                print!("{:.2}", self.data[i * self.width + j]);
 
                 if j > 0 || j < self.width {
                     print!("\t")
@@ -103,12 +118,12 @@ fn main() {
     // let matrix = Matrix::new(rows, cols);
 
     let mtx_a = Matrix {
-        data: vec![2, 3, 4, 1, 0, 0],
+        data: vec![2.0, 3.0, 4.0, 1.0, 0.0, 0.0],
         height: 2,
         width: 3,
     };
     let mtx_b = Matrix {
-        data: vec![0, 1000, 1, 100, 0, 10],
+        data: vec![0.0, 1000.0, 1.0, 100.0, 0.0, 10.0],
         height: 3,
         width: 2,
     };
