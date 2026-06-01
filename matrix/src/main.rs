@@ -12,10 +12,15 @@ impl Matrix {
         let mut matrix = vec![0.0; rows * cols];
         // let matrix: Vec<Vec<i64>> = (0..rows).map(|_| (0..cols).map(|_| 0).collect()).collect();
 
-        for x in 0..rows {
-            for y in 0..cols {
-                let n = get_f64("Type next matrix element: ");
-                matrix[x * cols + y] = n;
+        for i in 0..rows {
+            for j in 0..cols {
+                let msg = format!(
+                    "Type next matrix element [linha: {}][coluna: {}]: ",
+                    i + 1,
+                    j + 1
+                );
+                let n = get_f64(msg.as_str());
+                matrix[i * cols + j] = n;
             }
         }
 
@@ -26,18 +31,51 @@ impl Matrix {
         }
     }
 
-    fn det(&self) {
+    fn det(&self) -> f64 {
+        assert!(self.height == self.width);
+
         let mut m = self.clone();
+        let mut det = 1.0;
 
         for pivot in 0..self.height {
+            let mut best_abs = m.data[pivot * m.width + pivot].abs();
+            let mut best_row = pivot;
+
             for row in (pivot + 1)..self.height {
-                //TODO: lookup for greater pivot in the triangular matrix
+                let value = m.data[row * m.width + pivot].abs();
+
+                if value > best_abs {
+                    best_abs = value;
+                    best_row = row;
+                }
+            }
+
+            if best_abs == 0.0 {
+                return 0.0;
+            }
+
+            if best_row != pivot {
+                for col in 0..self.width {
+                    m.data.swap(pivot * m.width + col, best_row * m.width + col);
+                }
+
+                det = -det;
+            }
+
+            for row in (pivot + 1)..self.height {
                 let factor = m.data[row * m.width + pivot] / m.data[pivot * m.width + pivot];
+
                 for col in pivot..self.width {
-                    m.data[row * self.width + col] -= factor * m.data[pivot * m.width + col];
+                    m.data[row * m.width + col] -= factor * m.data[pivot * m.width + col];
                 }
             }
         }
+
+        for i in 0..self.height {
+            det *= m.data[i * m.width + i];
+        }
+
+        det
     }
 
     fn sum(&self, rhs_mtx: Matrix) -> Self {
@@ -117,18 +155,24 @@ fn main() {
 
     // let matrix = Matrix::new(rows, cols);
 
-    let mtx_a = Matrix {
-        data: vec![2.0, 3.0, 4.0, 1.0, 0.0, 0.0],
-        height: 2,
-        width: 3,
-    };
-    let mtx_b = Matrix {
-        data: vec![0.0, 1000.0, 1.0, 100.0, 0.0, 10.0],
-        height: 3,
-        width: 2,
-    };
+    // let mtx_a = Matrix {
+    //     data: vec![2.0, 3.0, 4.0, 1.0, 0.0, 0.0],
+    //     height: 2,
+    //     width: 3,
+    // };
+    // let mtx_b = Matrix {
+    //     data: vec![0.0, 1000.0, 1.0, 100.0, 0.0, 10.0],
+    //     height: 3,
+    //     width: 2,
+    // };
+
+    let mtx_a = Matrix::new(3, 3);
+    println!("Det mtx_a: {}", mtx_a.det());
+    let mtx_b = Matrix::new(3, 3);
+    println!("Det mtx_b: {}", mtx_b.det());
 
     let mtx_c = mtx_a.mul(mtx_b);
+    println!("Det mtx_c: {}", mtx_c.det());
 
     mtx_c.print();
 }
