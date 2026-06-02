@@ -1,3 +1,5 @@
+use std::hint::select_unpredictable;
+
 use myrustlib::get_f64;
 
 #[derive(Debug, Clone)]
@@ -123,6 +125,22 @@ impl Matrix {
         }
     }
 
+    fn transpose(&self) -> Matrix {
+        let mut transposed = Matrix {
+            data: vec![0.0; self.height * self.width],
+            height: self.width,
+            width: self.height,
+        };
+
+        for i in 0..self.height {
+            for j in 0..self.width {
+                transposed.data[j * transposed.width + i] = self.data[i * self.width + j];
+            }
+        }
+
+        transposed
+    }
+
     fn print(&self) {
         let mut l_edge = true;
         for i in 0..self.height {
@@ -166,13 +184,10 @@ fn main() {
     //     width: 2,
     // };
 
-    let mtx_a = Matrix::new(3, 3);
-    println!("Det mtx_a: {}", mtx_a.det());
-    let mtx_b = Matrix::new(3, 3);
-    println!("Det mtx_b: {}", mtx_b.det());
-
-    let mtx_c = mtx_a.mul(mtx_b);
-    println!("Det mtx_c: {}", mtx_c.det());
-
-    mtx_c.print();
+    let mtx_a = Matrix::new(3, 2);
+    println!("Matriz original: ");
+    mtx_a.print();
+    let mtx_b = mtx_a.transpose();
+    println!("Matriz transposta: ");
+    mtx_b.print();
 }
