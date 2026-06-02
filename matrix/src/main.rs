@@ -141,6 +141,24 @@ impl Matrix {
         transposed
     }
 
+    fn is_simetric(&self) -> bool {
+        if self.height != self.width {
+            return false;
+        }
+
+        let tranposed = self.transpose();
+
+        for i in 0..self.height {
+            for j in 0..self.width {
+                if tranposed.data[i * tranposed.width + j] != self.data[i * self.width + j] {
+                    return false;
+                }
+            }
+        }
+
+        true
+    }
+
     fn print(&self) {
         let mut l_edge = true;
         for i in 0..self.height {
@@ -184,10 +202,9 @@ fn main() {
     //     width: 2,
     // };
 
-    let mtx_a = Matrix::new(3, 2);
+    let mtx_a = Matrix::new(3, 3);
     println!("Matriz original: ");
     mtx_a.print();
-    let mtx_b = mtx_a.transpose();
-    println!("Matriz transposta: ");
-    mtx_b.print();
+
+    println!("Is simetric? {:?}", mtx_a.is_simetric());
 }
