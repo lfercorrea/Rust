@@ -159,6 +159,18 @@ impl Matrix {
         true
     }
 
+    fn scale(&self, scalar: f64) -> Matrix {
+        let mut new_mtx = self.clone();
+
+        for i in 0..new_mtx.height {
+            for j in 0..new_mtx.width {
+                new_mtx.data[i * new_mtx.width + j] *= scalar;
+            }
+        }
+
+        new_mtx
+    }
+
     fn print(&self) {
         let mut l_edge = true;
         for i in 0..self.height {
@@ -184,27 +196,12 @@ impl Matrix {
 }
 
 fn main() {
-    // let rows = get_i32("Tipe matrix rows: ");
-    // let rows = rows as usize;
-    // let cols = get_i32("Tipe matrix cols: ");
-    // let cols = cols as usize;
-
-    // let matrix = Matrix::new(rows, cols);
-
-    // let mtx_a = Matrix {
-    //     data: vec![2.0, 3.0, 4.0, 1.0, 0.0, 0.0],
-    //     height: 2,
-    //     width: 3,
-    // };
-    // let mtx_b = Matrix {
-    //     data: vec![0.0, 1000.0, 1.0, 100.0, 0.0, 10.0],
-    //     height: 3,
-    //     width: 2,
-    // };
-
     let mtx_a = Matrix::new(3, 3);
     println!("Matriz original: ");
     mtx_a.print();
 
-    println!("Is simetric? {:?}", mtx_a.is_simetric());
+    let scalar = 3.0;
+    let scaled = mtx_a.scale(scalar);
+    println!("Scaled matrix * {:.2} =", scalar);
+    scaled.print();
 }
