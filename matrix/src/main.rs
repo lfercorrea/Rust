@@ -141,6 +141,25 @@ impl Matrix {
         transposed
     }
 
+    fn identity(&self) -> Matrix {
+        assert!(self.height == self.width);
+
+        let data: Vec<f64> = (0..self.height * self.width)
+            .map(|i| {
+                let row = i / self.width;
+                let col = i % self.width;
+
+                if row == col { 1.0 } else { 0.0 }
+            })
+            .collect();
+
+        Matrix {
+            data,
+            height: self.height,
+            width: self.width,
+        }
+    }
+
     fn is_simetric(&self) -> bool {
         if self.height != self.width {
             return false;
@@ -204,4 +223,8 @@ fn main() {
     let scaled = mtx_a.scale(scalar);
     println!("Scaled matrix * {:.2} =", scalar);
     scaled.print();
+
+    let identity = mtx_a.identity();
+    println!("Identity:");
+    identity.print();
 }
