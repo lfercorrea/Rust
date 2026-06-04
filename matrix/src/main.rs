@@ -1,5 +1,3 @@
-use std::process::id;
-
 use myrustlib::get_f64;
 
 #[derive(Debug, Clone)]
@@ -125,6 +123,14 @@ impl Matrix {
             height: self.height,
             width: rhs_mtx.width,
         }
+    }
+
+    fn div(&self, div: Matrix) -> Option<Matrix> {
+        if let Some(matrix) = div.inverse() {
+            return Some(self.mul(matrix));
+        }
+
+        None
     }
 
     fn transpose(&self) -> Matrix {
@@ -276,14 +282,17 @@ impl Matrix {
                 }
             }
         }
+
+        println!()
     }
 }
 
 fn main() {
-    let a = Matrix::new(3, 3);
-    let b = a.inverse();
-
+    let a = Matrix::new(2, 2);
     a.print();
-    println!();
-    b.unwrap().print();
+    let b = Matrix::new(2, 2);
+    b.print();
+
+    let c = a.div(b).unwrap();
+    c.print();
 }
