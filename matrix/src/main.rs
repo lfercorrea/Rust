@@ -1,4 +1,4 @@
-use std::hint::select_unpredictable;
+use std::process::id;
 
 use myrustlib::get_f64;
 
@@ -8,6 +8,8 @@ struct Matrix {
     height: usize,
     width: usize,
 }
+
+const EPS: f64 = 1e-12;
 
 impl Matrix {
     fn new(rows: usize, cols: usize) -> Self {
@@ -160,6 +162,69 @@ impl Matrix {
         }
     }
 
+    fn inverse(&self) -> Option<Matrix> {
+        let mut idt = self.identity();
+        let mut m = self.clone();
+
+        for pivot in 0..m.height {
+            let mut best_abs = m.data[pivot * m.width + pivot].abs();
+            let mut best_row = pivot;
+
+            for row in (pivot + 1)..m.height {
+                let value = m.data[row * m.width + pivot].abs();
+
+                if value > best_abs {
+                    best_abs = value;
+                    best_row = row;
+                }
+            }
+
+            if best_row != pivot {
+                for col in 0..m.width {
+                    m.data.swap(pivot * m.width + col, best_row * m.width + col);
+                    idt.data
+                        .swap(pivot * idt.width + col, best_row * idt.width + col);
+                }
+            }
+
+            if best_abs < EPS {
+                return None;
+            }
+
+            let pivot_value = m.data[pivot * m.width + pivot];
+
+            for col in 0..m.width {
+                m.data[pivot * m.width + col] /= pivot_value;
+                idt.data[pivot * idt.width + col] /= pivot_value;
+            }
+
+            for row in (pivot + 1)..m.height {
+                let factor = m.data[row * m.width + pivot] / m.data[pivot * m.width + pivot];
+
+                for col in pivot..m.width {
+                    m.data[row * m.width + col] -= factor * m.data[pivot * m.width + col];
+                }
+
+                for col in 0..m.width {
+                    idt.data[row * idt.width + col] -= factor * idt.data[pivot * idt.width + col];
+                }
+            }
+        }
+
+        for pivot in (0..m.height).rev() {
+            for row in 0..pivot {
+                let factor = m.data[row * m.width + pivot];
+
+                for col in 0..m.width {
+                    m.data[row * m.width + col] -= factor * m.data[pivot * m.width + col];
+                    idt.data[row * idt.width + col] -= factor * idt.data[pivot * idt.width + col];
+                }
+            }
+        }
+
+        Some(idt)
+    }
+
     fn is_simetric(&self) -> bool {
         if self.height != self.width {
             return false;
@@ -215,16 +280,10 @@ impl Matrix {
 }
 
 fn main() {
-    let mtx_a = Matrix::new(3, 3);
-    println!("Matriz original: ");
-    mtx_a.print();
+    let a = Matrix::new(3, 3);
+    let b = a.inverse();
 
-    let scalar = 3.0;
-    let scaled = mtx_a.scale(scalar);
-    println!("Scaled matrix * {:.2} =", scalar);
-    scaled.print();
-
-    let identity = mtx_a.identity();
-    println!("Identity:");
-    identity.print();
+    a.print();
+    println!();
+    b.unwrap().print();
 }
