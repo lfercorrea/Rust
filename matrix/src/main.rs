@@ -11,6 +11,34 @@ struct Matrix {
 
 const EPS: f64 = 1e-12;
 
+impl std::fmt::Display for Matrix {
+    fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
+        let mut l_edge = true;
+        writeln!(f)?;
+        for i in 0..self.height {
+            for j in 0..self.width {
+                if l_edge {
+                    write!(f, "|\t")?;
+                    l_edge = false;
+                }
+
+                write!(f, "{:.2}", self.data[i * self.width + j])?;
+
+                if j > 0 || j < self.width {
+                    write!(f, "\t")?;
+                }
+
+                if j == self.width - 1 {
+                    writeln!(f, "|")?;
+                    l_edge = true;
+                }
+            }
+        }
+
+        writeln!(f)
+    }
+}
+
 impl Add for &Matrix {
     type Output = Matrix;
 
@@ -93,6 +121,10 @@ impl Mul for &Matrix {
 
 impl Matrix {
     fn new(rows: usize, cols: usize) -> Self {
+        assert!(
+            rows > 0 && cols > 0,
+            "Impossible matrix dimensions, row and col must be greater than zero"
+        );
         let mut matrix = vec![0.0; rows * cols];
         // let matrix: Vec<Vec<i64>> = (0..rows).map(|_| (0..cols).map(|_| 0).collect()).collect();
 
@@ -328,8 +360,10 @@ impl Matrix {
 }
 
 fn main() {
-    let a = Matrix::new(3, 3);
+    let a = Matrix::new(2, 2);
     a.print();
-    let b = Matrix::new(3, 3);
+    let b = Matrix::new(2, 2);
     b.print();
+    let c = &a + &b;
+    println!("Matrix C: {}", c);
 }
