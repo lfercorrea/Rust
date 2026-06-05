@@ -1,4 +1,4 @@
-use std::ops::{Add, Mul};
+use std::ops::{Add, Mul, Sub};
 
 use myrustlib::get_f64;
 
@@ -34,6 +34,32 @@ impl Add for &Matrix {
         }
 
         sum
+    }
+}
+
+impl Sub for &Matrix {
+    type Output = Matrix;
+
+    fn sub(self, rhs: Self) -> Self::Output {
+        assert!(
+            self.height == rhs.height && self.width == rhs.width,
+            "Incompatible dimensions to perform a subtraction"
+        );
+
+        let mut sub = Matrix {
+            data: vec![0_f64; self.height * self.width],
+            height: self.height,
+            width: self.width,
+        };
+
+        for i in 0..sub.height {
+            for j in 0..sub.width {
+                sub.data[i * sub.width + j] =
+                    self.data[i * self.width + j] - rhs.data[i * rhs.width + j];
+            }
+        }
+
+        sub
     }
 }
 
@@ -161,7 +187,10 @@ impl Matrix {
     }
 
     fn identity(&self) -> Matrix {
-        assert!(self.height == self.width);
+        assert!(
+            self.height == self.width,
+            "Rectangular matrixes doesn't have an identity matrix"
+        );
 
         let data: Vec<f64> = (0..self.height * self.width)
             .map(|i| {
@@ -299,12 +328,8 @@ impl Matrix {
 }
 
 fn main() {
-    let a = Matrix::new(4, 3);
+    let a = Matrix::new(3, 3);
     a.print();
     let b = Matrix::new(3, 3);
     b.print();
-
-    let mul = &a * &b;
-    println!("Mul:");
-    mul.print();
 }
