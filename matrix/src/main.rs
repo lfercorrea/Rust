@@ -1,3 +1,5 @@
+use std::ops::{Add, Mul};
+
 use myrustlib::get_f64;
 
 #[derive(Debug, Clone)]
@@ -8,6 +10,60 @@ struct Matrix {
 }
 
 const EPS: f64 = 1e-12;
+
+impl Add for &Matrix {
+    type Output = Matrix;
+
+    fn add(self, rhs: Self) -> Self::Output {
+        assert!(
+            self.height == rhs.height && self.width == rhs.width,
+            "Incompatible dimensions to perform a sum"
+        );
+
+        let mut sum = Matrix {
+            data: vec![0_f64; self.height * self.width],
+            height: self.height,
+            width: self.width,
+        };
+
+        for i in 0..sum.height {
+            for j in 0..sum.width {
+                sum.data[i * sum.width + j] =
+                    self.data[i * self.width + j] + rhs.data[i * rhs.width + j];
+            }
+        }
+
+        sum
+    }
+}
+
+impl Mul for &Matrix {
+    type Output = Matrix;
+
+    fn mul(self, rhs: Self) -> Self::Output {
+        assert!(
+            self.width == rhs.height,
+            "The matrixes have incompatible dimenions to multiply"
+        );
+
+        let mut mul = Matrix {
+            data: vec![0_f64; self.height * self.width],
+            height: self.height,
+            width: self.width,
+        };
+
+        for i in 0..self.height {
+            for j in 0..rhs.width {
+                for k in 0..self.width {
+                    mul.data[i * mul.width + j] +=
+                        self.data[i * self.width + k] * rhs.data[k * rhs.width + j];
+                }
+            }
+        }
+
+        mul
+    }
+}
 
 impl Matrix {
     fn new(rows: usize, cols: usize) -> Self {
@@ -80,54 +136,9 @@ impl Matrix {
         det
     }
 
-    fn sum(&self, rhs_mtx: Matrix) -> Self {
-        assert!(
-            self.height == rhs_mtx.height && self.width == rhs_mtx.width,
-            "The matrixes has incompatible dimensions to sum together."
-        );
-        let mut new_mtx = vec![0.0; rhs_mtx.height * rhs_mtx.width];
-
-        for i in 0..self.height {
-            for j in 0..self.width {
-                new_mtx[i * self.width + j] =
-                    self.data[i * self.width + j] + rhs_mtx.data[i * self.width + j];
-            }
-        }
-
-        Self {
-            data: new_mtx,
-            height: self.height,
-            width: self.width,
-        }
-    }
-
-    fn mul(&self, rhs_mtx: Matrix) -> Self {
-        assert!(
-            self.width == rhs_mtx.height,
-            "The matrixes haven't compatible dimensions to perform a multiplication."
-        );
-
-        let mut new_mtx = vec![0.0; self.height * rhs_mtx.width];
-
-        for i in 0..self.height {
-            for j in 0..rhs_mtx.width {
-                for k in 0..self.width {
-                    new_mtx[i * rhs_mtx.width + j] +=
-                        self.data[i * self.width + k] * rhs_mtx.data[k * rhs_mtx.width + j];
-                }
-            }
-        }
-
-        Self {
-            data: new_mtx,
-            height: self.height,
-            width: rhs_mtx.width,
-        }
-    }
-
-    fn div(&self, div: Matrix) -> Option<Matrix> {
-        if let Some(matrix) = div.inverse() {
-            return Some(self.mul(matrix));
+    fn div(&self, rhs: &Matrix) -> Option<Matrix> {
+        if let Some(matrix) = rhs.inverse() {
+            return Some(self + &matrix);
         }
 
         None
@@ -288,11 +299,12 @@ impl Matrix {
 }
 
 fn main() {
-    let a = Matrix::new(2, 2);
+    let a = Matrix::new(4, 3);
     a.print();
-    let b = Matrix::new(2, 2);
+    let b = Matrix::new(3, 3);
     b.print();
 
-    let c = a.div(b).unwrap();
-    c.print();
+    let mul = &a * &b;
+    println!("Mul:");
+    mul.print();
 }
