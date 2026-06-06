@@ -13,14 +13,10 @@ const EPS: f64 = 1e-12;
 
 impl std::fmt::Display for Matrix {
     fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
-        let mut l_edge = true;
         writeln!(f)?;
         for i in 0..self.height {
             for j in 0..self.width {
-                if l_edge {
-                    write!(f, "|\t")?;
-                    l_edge = false;
-                }
+                write!(f, "|\t")?;
 
                 write!(f, "{:.2}", self.data[i * self.width + j])?;
 
@@ -30,7 +26,6 @@ impl std::fmt::Display for Matrix {
 
                 if j == self.width - 1 {
                     writeln!(f, "|")?;
-                    l_edge = true;
                 }
             }
         }
@@ -101,9 +96,9 @@ impl Mul for &Matrix {
         );
 
         let mut mul = Matrix {
-            data: vec![0_f64; self.height * self.width],
+            data: vec![0_f64; self.height * rhs.width],
             height: self.height,
-            width: self.width,
+            width: rhs.width,
         };
 
         for i in 0..self.height {
@@ -202,27 +197,10 @@ impl Matrix {
         None
     }
 
-    fn transpose(&self) -> Matrix {
-        let mut transposed = Matrix {
-            data: vec![0.0; self.height * self.width],
-            height: self.width,
-            width: self.height,
-        };
-
-        for i in 0..self.height {
-            for j in 0..self.width {
-                transposed.data[j * transposed.width + i] = self.data[i * self.width + j];
-            }
+    fn identity(&self) -> Option<Matrix> {
+        if self.height != self.width {
+            return None;
         }
-
-        transposed
-    }
-
-    fn identity(&self) -> Matrix {
-        assert!(
-            self.height == self.width,
-            "Rectangular matrixes doesn't have an identity matrix"
-        );
 
         let data: Vec<f64> = (0..self.height * self.width)
             .map(|i| {
@@ -233,15 +211,15 @@ impl Matrix {
             })
             .collect();
 
-        Matrix {
+        Some(Matrix {
             data,
             height: self.height,
             width: self.width,
-        }
+        })
     }
 
     fn inverse(&self) -> Option<Matrix> {
-        let mut idt = self.identity();
+        let mut idt = self.identity().unwrap();
         let mut m = self.clone();
 
         for pivot in 0..m.height {
@@ -333,37 +311,28 @@ impl Matrix {
         new_mtx
     }
 
-    fn print(&self) {
-        let mut l_edge = true;
+    fn transpose(&self) -> Matrix {
+        let mut transposed = Matrix {
+            data: vec![0.0; self.height * self.width],
+            height: self.width,
+            width: self.height,
+        };
+
         for i in 0..self.height {
             for j in 0..self.width {
-                if l_edge {
-                    print!("|\t");
-                    l_edge = false;
-                }
-
-                print!("{:.2}", self.data[i * self.width + j]);
-
-                if j > 0 || j < self.width {
-                    print!("\t")
-                }
-
-                if j == self.width - 1 {
-                    println!("|");
-                    l_edge = true;
-                }
+                transposed.data[j * transposed.width + i] = self.data[i * self.width + j];
             }
         }
 
-        println!()
+        transposed
     }
 }
 
 fn main() {
     let a = Matrix::new(2, 2);
-    a.print();
+    println!("Matrix A: {}", a);
     let b = Matrix::new(2, 2);
-    b.print();
-    let c = &a + &b;
-    println!("Matrix C: {}", c);
+    println!("Matrix B: {}", b);
+    let c = &a * &b;
+    println!("(A*B) = Matrix C: {}", c);
 }
