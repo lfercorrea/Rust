@@ -16,7 +16,9 @@ impl std::fmt::Display for Matrix {
         writeln!(f)?;
         for i in 0..self.height {
             for j in 0..self.width {
-                write!(f, "|\t")?;
+                if j == 0 {
+                    write!(f, "|\t")?;
+                }
 
                 write!(f, "{:.2}", self.data[i * self.width + j])?;
 
