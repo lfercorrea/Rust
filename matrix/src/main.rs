@@ -32,7 +32,7 @@ impl std::fmt::Display for Matrix {
             }
         }
 
-        writeln!(f)
+        Ok(())
     }
 }
 
